@@ -26,40 +26,20 @@ h = types.KeyboardButton("H")
 am = types.KeyboardButton("Am")
 ch = types.KeyboardButton("Четверка")
 sh = types.KeyboardButton("Шестерка")
+vos = types.KeyboardButton("Восьмерка")
 ak = types.KeyboardButton("Аккорды")
 boi = types.KeyboardButton("Бой")
 ret = types.KeyboardButton("Вернуться")
 markup.add(welcome)
 akkords.add(c, d, e, em, f, g, a, h, dm, am, ret)
 vik.add(c, d, e, em, f, g, a, h, am, ret)
-boy.add(ch, sh, ret)
+boy.add(ch, sh, vos, ret)
 menu.add(ak, boi, vekt)
 
-# Создание вариантов приветствия и прощания которые вероятно будет вводить пользователь
-hi_1 = {
-    1: ["Привет", "Ку", "Хай", "Здарова", "Здаров", "Поздороваться", "Даров", "Дарова", "Мое почтение"],
-    2: ["Пока", "Прощай", "Покеда", "До новых встреч", "Увидимся"]
-}
-
-# Варианты приветствия и прощания от самого бота
+# Создание вариантов приветствия и прощания от бота
 hi = {
-    1: "Привет",
-    2: "Ку",
-    3: "Хай",
-    4: "Здарова",
-    5: "Здаров",
-    6: "Поздороваться",
-    7: "Даров",
-    8: "Мое почтение",
-    9: "ghbdtn"
-}
-by = {
-    1: "Пока",
-    2: "Прощай",
-    3: "Покеда",
-    4: "До новых встреч",
-    5: "Увидимся",
-    6: "gjrf"
+    1: ["Привет", "Ку", "Хай", "Здарова", "Здаров", "Даров", "Дарова", "Мое почтение"],
+    2: ["Пока", "Прощай", "Покеда", "До новых встреч", "Увидимся"]
 }
 # Создание словаря для викторинки на знание аккордов
 akk = {
@@ -86,8 +66,8 @@ def get_text_messages(message):
                          text="Привет, меня зовут Шлепа, ты можешь написать аккорд или бой и я отправлю тебе картинку, "
                               "чтобы ты знал как его зажать :)".format(message.from_user), reply_markup=menu)
         bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEG5V9joOHcQQpbtKTOMCW3n1eX9n49yAACURsAAi4oEEsHtj8GVrMeKiwE')
-    elif b in hi_1[1]:
-        hi_2 = random.choice(list(hi.values()))
+    elif b in hi[1]:
+        hi_2 = random.choice(list(hi[1].values()))
         bot.send_message(message.chat.id,
                          text=hi_2.format(
                              message.from_user), reply_markup=menu)
@@ -107,6 +87,9 @@ def get_text_messages(message):
     elif b == "Шестерка":
         bot.send_photo(message.from_user.id,
                        open(r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\boy\shesterka.jpg", "rb"))
+    elif b == "Восьмерка":
+        bot.send_photo(message.from_user.id,
+                       open(r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\boy\Vosmerka.jpg", "rb"))
 
     # Вывод меню с аккордами
     elif b == "Аккорды":
@@ -147,8 +130,8 @@ def get_text_messages(message):
                          "Я могу тебе показать аккорд, тебе осталось только его написать подсказка:Лучше писать английскими")
 
     # Прощание
-    elif b in hi_1[2]:
-        buying = random.choice(list(by.values()))
+    elif b in hi[2]:
+        buying = random.choice(list(hi[2].values()))
         bot.send_message(message.chat.id,
                          text=buying.format(message.from_user), reply_markup=markup)
     else:
