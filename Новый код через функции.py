@@ -93,6 +93,15 @@ bo = {
     "Шестерка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\boy\shesterka.jpg',
     "Восьмерка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\boy\Vosmerka.jpg'
 }
+stick = {
+    "hi": ['CAACAgIAAxkBAAEG5oVjoV1JA0tzCCkDEhqPGxbZ7-V80AACGSAAAkIxcEqOleNVc2Gz9CwE',
+           'CAACAgIAAxkBAAEHNh9jvwtrSG5d9ODVFwkAAdiSBMiyCZUAAmQiAALvQWlKaTmyyNstuMMtBA'],
+
+    "depr": ['CAACAgIAAxkBAAEG5odjoV9eePKBrLbItdphAtMYze31xQACECAAAmE0aErrMemvXMLY8ywE',
+             'CAACAgIAAxkBAAEHNhVjvwpxsTxcx2gXPSZZ9bUBnvr0bAACKA0AAtgkAAFJFu-IZGRz4XstBA',
+             'CAACAgIAAxkBAAEHNhdjvwp_v28JoV6n7-7J3mDG5im6bQACAxEAAoS74Ek3fGZjMbw2Zy0E',
+             'CAACAgIAAxkBAAEHNhNjvwpu_qY6Nutnc1Bv8QEKUT0ecAACJA8AAkF0MUtLbb06I1IVEy0E']
+}
 
 
 # Приветствие
@@ -101,21 +110,19 @@ def welcoming(message):
         bot.send_message(message.chat.id,
                          text="Привет, меня зовут Шлепа, ты можешь написать аккорд или бой и я отправлю тебе картинку, "
                               "чтобы ты знал как его зажать :)".format(message.from_user), reply_markup=menu)
-        bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEG5V9joOHcQQpbtKTOMCW3n1eX9n49yAACURsAAi4oEEsHtj8GVrMeKiwE')
+        bot.send_sticker(message.chat.id, random.choice(list(stick["hi"])))
     elif message.text in user_inp[1]:
         hi_2 = random.choice(list(bot_hi.values()))
-        bot.send_message(message.chat.id,
-                         text=hi_2.format(
-                             message.from_user), reply_markup=menu)
-        bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEG5oVjoV1JA0tzCCkDEhqPGxbZ7-V80AACGSAAAkIxcEqOleNVc2Gz9CwE')
+        bot.send_message(message.chat.id, text=hi_2.format(message.from_user), reply_markup=menu)
+        bot.send_sticker(message.chat.id, random.choice(list(stick["hi"])))
 
 
 # Создание викторины, ПОПРОБОВАТЬ СДЕЛАТЬ ИГРУ
 def vikt(message):
     bot.send_message(message.chat.id, text="Итак, викторина.".format(message.from_user), reply_markup=vik)
     bot.send_message(message.from_user.id,
-                     "Правила просты, просто угадываешь аккорд, если ошибаешься, то все по новой")
-    live = 2
+                     "Правила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
+    live = 3
     count = 0
     while live > 0:
         b = message.text.title()
@@ -131,7 +138,7 @@ def vikt(message):
             live -= 1
         if live == 0:
             bot.send_message(message.from_user.id,
-                             text=f"Ты проиграл, количество отгаданных аккордов:{count}".format(message.from_user),
+                             text=f"Ты проиграл, количество правильных ответов:{count}".format(message.from_user),
                              reply_markup=menu)
 
 
@@ -145,7 +152,8 @@ def get_text_messages(message):
     if b == "/start" or translate.title() in user_inp[1]:
         welcoming(message)
     elif b == "Викторина":
-        vikt(message)
+        bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
+        bot.send_sticker(message.chat.id, random.choice(list(stick["depr"])))
     # Вывод боя и выбор
     elif b == "Бой":
         bot.send_message(message.chat.id,
