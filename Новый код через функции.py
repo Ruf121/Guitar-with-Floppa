@@ -42,6 +42,18 @@ user_inp = {
     2: ["Пока", "Прощай", "Покеда", "До новых встреч", "Увидимся"]
 }
 
+for_vict = {
+    'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\С.jpg',
+    'D': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\D.png",
+    'E': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\E.jpg",
+    'Em': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\em.jpg",
+    "F": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\f-major.png",
+    "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\g.jpg",
+    "Dm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Dm.png",
+    "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\A.png",
+    "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\H.jpg",
+    "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Am.png"
+}
 # Создание словаря картинок
 akk = {
     'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\С.jpg',
@@ -142,10 +154,11 @@ def vikt(message):
     count = 0
     while live > 0:
         b = message.text.title()
-        answer = random.choice(list(akk))
-        ind = akk[answer]
+        answer = random.choice(list(for_vict))
+        ind = for_vict[answer]
         bot.send_photo(message.from_user.id, open(ind, "rb"))
         bot.send_message(message.chat.id, text="Какой это аккорд?)".format(message.from_user), reply_markup=akkords)
+        # Тут должна быть функция или команда которая заставляет бота ожидать ответа от пользователя
         if b == answer:
             bot.send_message(message.from_user.id, "Правильно!")
             count += 1
@@ -166,8 +179,9 @@ def get_text_messages(message):
     if b == "/start" or b == "Поздороваться":
         welcoming(message)
     elif b == "Викторина":
-        bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
-        stick_dep(message)
+        """bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
+        stick_dep(message)"""
+        vikt(message)
     # Вывод боя и выбор
     elif b == "Бой":
         bot.send_message(message.chat.id,
@@ -180,8 +194,8 @@ def get_text_messages(message):
         bot.send_message(message.chat.id,
                          text="Выбирай аккорд".format(
                              message.from_user), reply_markup=akkords)
-    elif b in akk:
-        bot.send_photo(message.from_user.id, open(akk[b], "rb"))
+    elif b in for_vict:
+        bot.send_photo(message.from_user.id, open(for_vict[b], "rb"))
     # Возврат к меню
     elif b == "Вернуться":
         bot.send_message(message.chat.id, text="Выбери что тебе нужно :)".format(message.from_user), reply_markup=menu)
@@ -202,4 +216,4 @@ def get_text_messages(message):
 
 
 # Обратная связь с ботом
-bot.polling(none_stop=True, interval=2)
+bot.polling(interval=2)
