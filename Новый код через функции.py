@@ -2,8 +2,6 @@ import telebot
 from telebot import types
 import random
 
-used_stick = {}
-
 # Токен
 bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
 # Создание менюшки
@@ -80,6 +78,10 @@ stick = {
            'CAACAgIAAxkBAAEHOdZjwFNinFXQJAABxmNTUAAB1y-vkt8vAAJnDAAC-xihS4JDjXDhj00DLQQ']
 }
 
+used_stick_hi = []
+used_stick_by = []
+used_stick_depr = []
+
 
 # Приветствие
 def welcoming(message):
@@ -87,11 +89,48 @@ def welcoming(message):
         bot.send_message(message.chat.id,
                          text="Привет, меня зовут Шлепа, ты можешь написать аккорд или бой и я отправлю тебе картинку, "
                               "чтобы ты знал как его зажать :)".format(message.from_user), reply_markup=menu)
-        bot.send_sticker(message.chat.id, random.choice(list(stick["hi"])))
+        stick_hi(message)
     elif message.text == "Поздороваться":
         hi_2 = random.choice(list(user_inp[1]))
         bot.send_message(message.chat.id, text=hi_2.format(message.from_user), reply_markup=menu)
-        bot.send_sticker(message.chat.id, random.choice(list(stick["hi"])))
+        stick_hi(message)
+
+
+# Функции чтобы одни и те же стикеры не повторялись много раз
+def stick_dep(message):
+    chosen = random.choice(list(stick["depr"]))
+    old_depr = ''
+    while chosen == old_depr:
+        chosen = random.choice(list(stick["depr"]))
+    bot.send_sticker(message.chat.id, chosen)
+    if len(used_stick_depr) == 3:
+        used_stick_depr.clear()
+    old_depr = chosen
+    used_stick_depr.append(old_depr)
+
+
+def stick_hi(message):
+    chosen = random.choice(list(stick["hi"]))
+    old_hi = ''
+    while chosen == old_hi:
+        chosen = random.choice(list(stick["hi"]))
+    bot.send_sticker(message.chat.id, chosen)
+    if len(used_stick_hi) == 3:
+        used_stick_hi.clear()
+    old_hi = chosen
+    used_stick_hi.append(old_hi)
+
+
+def stick_by(message):
+    chosen = random.choice(list(stick["by"]))
+    old_by = ''
+    while chosen == old_by:
+        chosen = random.choice(list(stick["by"]))
+    bot.send_sticker(message.chat.id, chosen)
+    if len(used_stick_by) == 3:
+        used_stick_by.clear()
+    old_by = chosen
+    used_stick_by.append(old_by)
 
 
 # Создание викторины, ПОПРОБОВАТЬ СДЕЛАТЬ ИГРУ
@@ -128,7 +167,7 @@ def get_text_messages(message):
         welcoming(message)
     elif b == "Викторина":
         bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
-        bot.send_sticker(message.chat.id, random.choice(list(stick["depr"])))
+        stick_dep(message)
     # Вывод боя и выбор
     elif b == "Бой":
         bot.send_message(message.chat.id,
@@ -155,6 +194,7 @@ def get_text_messages(message):
         buying = random.choice(list(user_inp[2]))
         bot.send_message(message.chat.id,
                          text=buying.format(message.from_user), reply_markup=markup)
+        stick_by(message)
     else:
         bot.send_message(message.from_user.id,
                          "Я тебя не понял, если тебе что то не понятно напиши /help, а если ты хочешь начать общение то просто "
