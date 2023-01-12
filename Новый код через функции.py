@@ -1,24 +1,8 @@
 import telebot
 from telebot import types
 import random
-from transliterate.base import TranslitLanguagePack, registry
-from transliterate import get_available_language_codes, translit
 
-
-class KBDLanguagePack(TranslitLanguagePack):
-    language_code = "kbd"
-    language_name = "KeyBoard"
-    mapping = (
-        'ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэячсмитьбю.',
-        'QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?qwertyuiop[]asdfghjkl;\'zxcvbnm,./',
-    )
-
-
-# проверяем регистрацию пакета
-registry.register(KBDLanguagePack)
-
-# True
-var = 'kbd' in get_available_language_codes()
+used_stick = {}
 
 # Токен
 bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
@@ -31,6 +15,7 @@ vik = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
 # Создание кнопок для выбора
 welcome = types.KeyboardButton("Поздороваться")
+by = types.KeyboardButton("Попрощаться")
 vekt = types.KeyboardButton("Викторина")
 c = types.KeyboardButton("C")
 d = types.KeyboardButton("D")
@@ -51,31 +36,14 @@ markup.add(welcome)
 akkords.add(c, d, e, em, f, g, a, h, am, ret)
 vik.add(c, d, e, em, f, g, a, h, am, ret)
 boy.add(ch, sh, vos, ret)
-menu.add(ak, boi, vekt)
+menu.add(ak, boi, vekt, by)
 
 # Создание вариантов приветствия и прощания которые вероятно будет вводить пользователь
 user_inp = {
-    1: ["Привет", "Ку", "Хай", "Здарова", "Здаров", "Поздороваться", "Даров", "Дарова", "Мое почтение"],
+    1: ["Привет", "Ку", "Хай", "Здарова", "Здаров", "Даров", "Дарова", "Мое почтение"],
     2: ["Пока", "Прощай", "Покеда", "До новых встреч", "Увидимся"]
 }
 
-# Варианты приветствия и прощания от самого бота
-bot_hi = {
-    1: "Привет",
-    2: "Ку",
-    3: "Хай",
-    4: "Здарова",
-    5: "Здаров",
-    6: "Даров",
-    7: "Мое почтение"
-}
-bot_by = {
-    1: "Пока",
-    2: "Прощай",
-    3: "Покеда",
-    4: "До новых встреч",
-    5: "Увидимся"
-}
 # Создание словаря картинок
 akk = {
     'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\С.jpg',
@@ -94,13 +62,22 @@ bo = {
     "Восьмерка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\boy\Vosmerka.jpg'
 }
 stick = {
+    # Просто для того чтобы поздороваться
     "hi": ['CAACAgIAAxkBAAEG5oVjoV1JA0tzCCkDEhqPGxbZ7-V80AACGSAAAkIxcEqOleNVc2Gz9CwE',
-           'CAACAgIAAxkBAAEHNh9jvwtrSG5d9ODVFwkAAdiSBMiyCZUAAmQiAALvQWlKaTmyyNstuMMtBA'],
-
+           'CAACAgIAAxkBAAEHNh9jvwtrSG5d9ODVFwkAAdiSBMiyCZUAAmQiAALvQWlKaTmyyNstuMMtBA',
+           'CAACAgIAAxkBAAEHOcpjwFEe-dgckwclnbLrr6qay4mlkAAC8AoAAozKqUoAAfScFqvy1AItBA',
+           'CAACAgIAAxkBAAEHOcxjwFElfpJWFxvOaQKiQGdp9zOljgACLxAAAnEbqEo5-QrXpUyHMy0E',
+           'CAACAgIAAxkBAAEHOc5jwFEoLUiJ5jOwiyf8nwzhnh7D3AACCwsAAuHfqUpX01r7JW3ECC0E'],
+    # Стикеры с грустным или депрессивным Шлепой
     "depr": ['CAACAgIAAxkBAAEG5odjoV9eePKBrLbItdphAtMYze31xQACECAAAmE0aErrMemvXMLY8ywE',
              'CAACAgIAAxkBAAEHNhVjvwpxsTxcx2gXPSZZ9bUBnvr0bAACKA0AAtgkAAFJFu-IZGRz4XstBA',
              'CAACAgIAAxkBAAEHNhdjvwp_v28JoV6n7-7J3mDG5im6bQACAxEAAoS74Ek3fGZjMbw2Zy0E',
-             'CAACAgIAAxkBAAEHNhNjvwpu_qY6Nutnc1Bv8QEKUT0ecAACJA8AAkF0MUtLbb06I1IVEy0E']
+             'CAACAgIAAxkBAAEHNhNjvwpu_qY6Nutnc1Bv8QEKUT0ecAACJA8AAkF0MUtLbb06I1IVEy0E'],
+
+    "by": ['CAACAgIAAxkBAAEHOdBjwFM8F7Ups61jlebM-vfZLyAqmwACFg0AAi5FMUvkjTAr0RfRUy0E',
+           'CAACAgIAAxkBAAEHOdFjwFM9Uk-tR7Uz8TBkjNvna6UAAaIAAkANAALRBuhKXBBwRgJRkoUtBA',
+           'CAACAgIAAxkBAAEHOdRjwFNbGhkVyTzAsVHYrezTqq3i5wAC3AwAArwyMEvpqHQDAcqfgC0E',
+           'CAACAgIAAxkBAAEHOdZjwFNinFXQJAABxmNTUAAB1y-vkt8vAAJnDAAC-xihS4JDjXDhj00DLQQ']
 }
 
 
@@ -111,8 +88,8 @@ def welcoming(message):
                          text="Привет, меня зовут Шлепа, ты можешь написать аккорд или бой и я отправлю тебе картинку, "
                               "чтобы ты знал как его зажать :)".format(message.from_user), reply_markup=menu)
         bot.send_sticker(message.chat.id, random.choice(list(stick["hi"])))
-    elif message.text in user_inp[1]:
-        hi_2 = random.choice(list(bot_hi.values()))
+    elif message.text == "Поздороваться":
+        hi_2 = random.choice(list(user_inp[1]))
         bot.send_message(message.chat.id, text=hi_2.format(message.from_user), reply_markup=menu)
         bot.send_sticker(message.chat.id, random.choice(list(stick["hi"])))
 
@@ -146,10 +123,8 @@ def vikt(message):
 @bot.message_handler(content_types=['text', 'audio', 'photo', 'video', 'document'])
 def get_text_messages(message):
     b = message.text.title()
-    text = b
-    translate = translit(text, language_code='kbd', reversed=True)
     # Начало и приветствие бота
-    if b == "/start" or translate.title() in user_inp[1]:
+    if b == "/start" or b == "Поздороваться":
         welcoming(message)
     elif b == "Викторина":
         bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
@@ -176,8 +151,8 @@ def get_text_messages(message):
         bot.send_message(message.from_user.id,
                          "Я могу тебе показать аккорд, тебе осталось только его написать подсказка:Лучше писать английскими")
     # Прощание
-    elif b in user_inp[2]:
-        buying = random.choice(list(bot_by.values()))
+    elif b == "Попрощаться":
+        buying = random.choice(list(user_inp[2]))
         bot.send_message(message.chat.id,
                          text=buying.format(message.from_user), reply_markup=markup)
     else:
