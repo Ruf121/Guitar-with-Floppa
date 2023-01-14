@@ -1,6 +1,7 @@
 import telebot
 from telebot import types
 import random
+from telebot import time
 
 # Токен
 bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
@@ -145,20 +146,26 @@ def stick_by(message):
     used_stick_by.append(old_by)
 
 
+# Переменная для счета угаданных аккордов
+count = 0
+
+
 # Создание викторины, ПОПРОБОВАТЬ СДЕЛАТЬ ИГРУ
 def vikt(message):
     bot.send_message(message.chat.id, text="Итак, викторина.".format(message.from_user), reply_markup=vik)
     bot.send_message(message.from_user.id,
                      "Правила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
     live = 3
-    count = 0
+    global count
     while live > 0:
-        b = message.text.title()
+        b = message.from_user
         answer = random.choice(list(for_vict))
         ind = for_vict[answer]
+        print(answer, ind)
         bot.send_photo(message.from_user.id, open(ind, "rb"))
         bot.send_message(message.chat.id, text="Какой это аккорд?)".format(message.from_user), reply_markup=akkords)
         # Тут должна быть функция или команда которая заставляет бота ожидать ответа от пользователя
+        time.sleep(5)
         if b == answer:
             bot.send_message(message.from_user.id, "Правильно!")
             count += 1
@@ -179,9 +186,8 @@ def get_text_messages(message):
     if b == "/start" or b == "Поздороваться":
         welcoming(message)
     elif b == "Викторина":
-        """bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
-        stick_dep(message)"""
-        vikt(message)
+        bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
+        stick_dep(message)
     # Вывод боя и выбор
     elif b == "Бой":
         bot.send_message(message.chat.id,
@@ -194,7 +200,7 @@ def get_text_messages(message):
         bot.send_message(message.chat.id,
                          text="Выбирай аккорд".format(
                              message.from_user), reply_markup=akkords)
-    elif b in for_vict:
+    elif b in akk:
         bot.send_photo(message.from_user.id, open(for_vict[b], "rb"))
     # Возврат к меню
     elif b == "Вернуться":
