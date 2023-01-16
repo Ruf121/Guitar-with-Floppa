@@ -1,19 +1,22 @@
-import telebot
-from telebot import types
 import random
+
+import telebot
+from aiogram.types import update
 from telebot import time
+from telebot import types
 
 # Токен
 bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
+
 # Создание менюшки
-markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+welcome = types.ReplyKeyboardMarkup(resize_keyboard=True)
 menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 akkords = types.ReplyKeyboardMarkup(resize_keyboard=True)
 boy = types.ReplyKeyboardMarkup(resize_keyboard=True)
 vik = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
-# Создание кнопок для выбора
-welcome = types.KeyboardButton("Поздороваться")
+# Создание кнопок для выбора = types.KeyboardButton("Поздороваться")
+hi = types.KeyboardButton("Поздороваться")
 by = types.KeyboardButton("Попрощаться")
 vekt = types.KeyboardButton("Викторина")
 c = types.KeyboardButton("C")
@@ -31,7 +34,7 @@ vos = types.KeyboardButton("Восьмерка")
 ak = types.KeyboardButton("Аккорды")
 boi = types.KeyboardButton("Бой")
 ret = types.KeyboardButton("Вернуться")
-markup.add(welcome)
+welcome.add(hi)
 akkords.add(c, d, e, em, f, g, a, h, am, ret)
 vik.add(c, d, e, em, f, g, a, h, am, ret)
 boy.add(ch, sh, vos, ret)
@@ -100,16 +103,16 @@ used_stick_depr = []
 def welcoming(message):
     if message.text == "/start":
         bot.send_message(message.chat.id,
-                         text="Привет, меня зовут Шлепа, ты можешь написать аккорд или бой и я отправлю тебе картинку, "
-                              "чтобы ты знал как его зажать :)".format(message.from_user), reply_markup=menu)
+                         "Привет, меня зовут Шлепа, ты можешь написать аккорд или бой и я отправлю тебе картинку, "
+                         "чтобы ты знал как его зажать :)", reply_markup=menu)
         stick_hi(message)
     elif message.text == "Поздороваться":
         hi_2 = random.choice(list(user_inp[1]))
-        bot.send_message(message.chat.id, text=hi_2.format(message.from_user), reply_markup=menu)
+        bot.send_message(message.chat.id, hi_2, reply_markup=menu)
         stick_hi(message)
 
 
-# Функции чтобы одни и те же стикеры не повторялись много раз
+# Функции чтобы одни и те же стикеры не повторялись много раз и для их отправки
 def stick_dep(message):
     chosen = random.choice(list(stick["depr"]))
     old_depr = ''
@@ -146,35 +149,30 @@ def stick_by(message):
     used_stick_by.append(old_by)
 
 
-# Переменная для счета угаданных аккордов
-count = 0
-
-
-# Создание викторины, ПОПРОБОВАТЬ СДЕЛАТЬ ИГРУ
+# Создание викторины
 def vikt(message):
-    bot.send_message(message.chat.id, text="Итак, викторина.".format(message.from_user), reply_markup=vik)
+    bot.send_message(message.chat.id, "Итак, викторина.", reply_markup=vik)
     bot.send_message(message.from_user.id,
                      "Правила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
     live = 3
-    global count
+    count = 0
     while live > 0:
-        b = message.from_user
         answer = random.choice(list(for_vict))
         ind = for_vict[answer]
-        print(answer, ind)
         bot.send_photo(message.from_user.id, open(ind, "rb"))
-        bot.send_message(message.chat.id, text="Какой это аккорд?)".format(message.from_user), reply_markup=akkords)
-        # Тут должна быть функция или команда которая заставляет бота ожидать ответа от пользователя
+        bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=akkords)
+        print(answer)
+        # Ожидание бота ответа от пользователя
         time.sleep(5)
-        if b == answer:
+        print(update.Message.text)
+        if message.text == answer:
             bot.send_message(message.from_user.id, "Правильно!")
             count += 1
-        elif b != answer:
+        elif message.text != answer:
             bot.send_message(message.from_user.id, "Неправильно")
             live -= 1
         if live == 0:
-            bot.send_message(message.from_user.id,
-                             text=f"Ты проиграл, количество правильных ответов:{count}".format(message.from_user),
+            bot.send_message(message.from_user.id, f"Ты проиграл, количество правильных ответов:{count}",
                              reply_markup=menu)
 
 
@@ -186,25 +184,22 @@ def get_text_messages(message):
     if b == "/start" or b == "Поздороваться":
         welcoming(message)
     elif b == "Викторина":
-        bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
-        stick_dep(message)
+        """bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
+        stick_dep(message)"""
+        vikt(message)
     # Вывод боя и выбор
     elif b == "Бой":
-        bot.send_message(message.chat.id,
-                         text="Выбирай бой".format(
-                             message.from_user), reply_markup=boy)
+        bot.send_message(message.chat.id, "Выбирай бой", reply_markup=boy)
     elif b in bo:
         bot.send_photo(message.from_user.id, open(bo[b], "rb"))
     # Вывод меню с аккордами
     elif b == "Аккорды":
-        bot.send_message(message.chat.id,
-                         text="Выбирай аккорд".format(
-                             message.from_user), reply_markup=akkords)
+        bot.send_message(message.chat.id, "Выбирай аккорд", reply_markup=akkords)
     elif b in akk:
-        bot.send_photo(message.from_user.id, open(for_vict[b], "rb"))
+        bot.send_photo(message.from_user.id, open(akk[b], "rb"))
     # Возврат к меню
     elif b == "Вернуться":
-        bot.send_message(message.chat.id, text="Выбери что тебе нужно :)".format(message.from_user), reply_markup=menu)
+        bot.send_message(message.chat.id, "Выбери что тебе нужно :)", reply_markup=menu)
     # Помощь
     elif message.text == "/help":
         bot.send_message(message.from_user.id,
@@ -212,8 +207,7 @@ def get_text_messages(message):
     # Прощание
     elif b == "Попрощаться":
         buying = random.choice(list(user_inp[2]))
-        bot.send_message(message.chat.id,
-                         text=buying.format(message.from_user), reply_markup=markup)
+        bot.send_message(message.chat.id, buying, reply_markup=welcome)
         stick_by(message)
     else:
         bot.send_message(message.from_user.id,
