@@ -1,7 +1,6 @@
 import random
 
 import telebot
-from aiogram.types import update
 from telebot import time
 from telebot import types
 
@@ -164,7 +163,7 @@ def vikt(message):
         print(answer)
         # Ожидание бота ответа от пользователя
         time.sleep(5)
-        print(update.Message.text)
+
         if message.text == answer:
             bot.send_message(message.from_user.id, "Правильно!")
             count += 1
