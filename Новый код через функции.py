@@ -13,13 +13,22 @@ menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 akkords = types.ReplyKeyboardMarkup(resize_keyboard=True)
 boy = types.ReplyKeyboardMarkup(resize_keyboard=True)
 vik = types.ReplyKeyboardMarkup(resize_keyboard=True)
+A = types.ReplyKeyboardMarkup(resize_keyboard=True)
+D = types.ReplyKeyboardMarkup(resize_keyboard=True)
+E = types.ReplyKeyboardMarkup(resize_keyboard=True)
+F = types.ReplyKeyboardMarkup(resize_keyboard=True)
+G = types.ReplyKeyboardMarkup(resize_keyboard=True)
+H = types.ReplyKeyboardMarkup(resize_keyboard=True)
+C = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
-# Создание кнопок для выбора = types.KeyboardButton("Поздороваться")
+
+# Создание кнопок для выбора
 hi = types.KeyboardButton("Поздороваться")
 by = types.KeyboardButton("Попрощаться")
 vekt = types.KeyboardButton("Викторина")
 c = types.KeyboardButton("C")
 d = types.KeyboardButton("D")
+dm = types.KeyboardButton("Dm")
 e = types.KeyboardButton("E")
 em = types.KeyboardButton("Em")
 f = types.KeyboardButton("F")
@@ -34,12 +43,19 @@ ak = types.KeyboardButton("Аккорды")
 boi = types.KeyboardButton("Бой")
 ret = types.KeyboardButton("Вернуться")
 welcome.add(hi)
-akkords.add(c, d, e, em, f, g, a, h, am, ret)
+akkords.add(a, d, e, f, g, h, c, ret)
+A.add(a, am)
+D.add(d, dm)
+E.add(em, e)
+F.add(f)
+G.add(g)
+H.add(h)
+C.add(c)
 vik.add(c, d, e, em, f, g, a, h, am, ret)
 boy.add(ch, sh, vos, ret)
 menu.add(ak, boi, vekt, by)
 
-# Создание вариантов приветствия и прощания которые вероятно будет вводить пользователь
+# Создание вариантов приветствия и прощания которые от бота
 user_inp = {
     1: ["Привет", "Ку", "Хай", "Здарова", "Здаров", "Даров", "Дарова", "Мое почтение"],
     2: ["Пока", "Прощай", "Покеда", "До новых встреч", "Увидимся"]
@@ -57,18 +73,25 @@ for_vict = {
     "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\H.jpg",
     "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Am.png"
 }
+
+
 # Создание словаря картинок
 akk = {
-    'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\С.jpg',
-    'D': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\D-2.png.webp",
-    'E': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\E.jpg",
-    'Em': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\em.jpg",
-    "F": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\f-major.png",
-    "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\g.jpg",
-    "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\A.png",
-    "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\H.jpg",
-    "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\ak\am.webp"
+    'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\С\C.png',
+    'C(III)': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\С\C(III).png',
+    'C(VI)': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\С\C(VI).png',
+    'D': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\D\D.png",
+    'Dm': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\D\Dm.png',
+    'E': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\E\E.png",
+    'Em': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\E\Em.png",
+    "F": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\F\F.png",
+    "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\G\G.png",
+    "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\A\A.jpg",
+    "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\H\H.png",
+    "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\A\Am.png"
 }
+
+
 bo = {
     "Четверка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\boy\kg5.png',
     "Шестерка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\boy\shesterka.jpg',
@@ -93,10 +116,6 @@ stick = {
            'CAACAgIAAxkBAAEHOdZjwFNinFXQJAABxmNTUAAB1y-vkt8vAAJnDAAC-xihS4JDjXDhj00DLQQ']
 }
 
-used_stick_hi = []
-used_stick_by = []
-used_stick_depr = []
-
 
 # Приветствие
 def welcoming(message):
@@ -113,6 +132,7 @@ def welcoming(message):
 
 # Функции чтобы одни и те же стикеры не повторялись много раз и для их отправки
 def stick_dep(message):
+    used_stick_depr = []
     chosen = random.choice(list(stick["depr"]))
     old_depr = ''
     while chosen == old_depr:
@@ -125,6 +145,7 @@ def stick_dep(message):
 
 
 def stick_hi(message):
+    used_stick_hi = []
     chosen = random.choice(list(stick["hi"]))
     old_hi = ''
     while chosen == old_hi:
@@ -137,6 +158,7 @@ def stick_hi(message):
 
 
 def stick_by(message):
+    used_stick_by = []
     chosen = random.choice(list(stick["by"]))
     old_by = ''
     while chosen == old_by:
