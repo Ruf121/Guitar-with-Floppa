@@ -201,7 +201,7 @@ def vikt(message):
 def get_text_messages(message):
     b = message.text.title()
     # Начало и приветствие бота
-    if b == "/start" or b == "Поздороваться":
+    if message.text == "/start" or b == "Поздороваться":
         welcoming(message)
     elif b == "Викторина":
         bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
@@ -231,9 +231,9 @@ def get_text_messages(message):
         stick_by(message)
     else:
         bot.send_message(message.chat.id,
-                         "Я тебя не понял, если тебе что то не понятно напиши /help, а если ты хочешь начать общение то просто "
-                         "поздоровайся со мной:)")
+                         "Что-то пошло не так, если тебе что то не понятно напиши /help, а если ты хочешь начать общение то просто "
+                         "напиши Поздороваться:)")
 
 
 # Обратная связь с ботом
-bot.infinity_polling(long_polling_timeout=10, interval=2)
+bot.polling(interval=2)
