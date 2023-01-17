@@ -5,7 +5,7 @@ from telebot import time
 from telebot import types
 
 # Токен
-bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
+bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c', protect_content=True)
 
 # Создание менюшки
 welcome = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -173,27 +173,26 @@ def stick_by(message):
 # Создание викторины
 def vikt(message):
     bot.send_message(message.chat.id, "Итак, викторина.", reply_markup=vik)
-    bot.send_message(message.from_user.id,
-                     "Правила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
+    bot.send_message(message.chat.id, "Правила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
     live = 3
     count = 0
-    while live > 0:
+    while live > 0 or message.text != "Вернуться":
         answer = random.choice(list(for_vict))
         ind = for_vict[answer]
-        bot.send_photo(message.from_user.id, open(ind, "rb"))
+        bot.send_photo(message.chat.id, open(ind, "rb"))
         bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=akkords)
         print(answer)
         # Ожидание бота ответа от пользователя
         time.sleep(5)
-
+        bot.get_updates()
         if message.text == answer:
-            bot.send_message(message.from_user.id, "Правильно!")
+            bot.send_message(message.chat.id, "Правильно!")
             count += 1
         elif message.text != answer:
-            bot.send_message(message.from_user.id, "Неправильно")
+            bot.send_message(message.chat.id, "Неправильно")
             live -= 1
         if live == 0:
-            bot.send_message(message.from_user.id, f"Ты проиграл, количество правильных ответов:{count}",
+            bot.send_message(message.chat.id, f"Ты проиграл, количество правильных ответов:{count}",
                              reply_markup=menu)
 
 
@@ -210,30 +209,31 @@ def get_text_messages(message):
     # Вывод боя и выбор
     elif b == "Бой":
         bot.send_message(message.chat.id, "Выбирай бой", reply_markup=boy)
+        bot.send_message(message.chat.id, "Примечание: крестиком обозначается глушение ударом")
     elif b in bo:
-        bot.send_photo(message.from_user.id, open(bo[b], "rb"))
+        bot.send_photo(message.chat.id, open(bo[b], "rb"))
     # Вывод меню с аккордами
     elif b == "Аккорды":
         bot.send_message(message.chat.id, "Выбирай аккорд", reply_markup=akkords)
+        bot.send_message(message.chat.id, "Примечание, крестиком обозначается струна которую нельзя трогать, а кружком просто открытая струна")
     elif b in akk:
-        bot.send_photo(message.from_user.id, open(akk[b], "rb"))
+        bot.send_photo(message.chat.id, open(akk[b], "rb"))
     # Возврат к меню
     elif b == "Вернуться":
         bot.send_message(message.chat.id, "Выбери что тебе нужно :)", reply_markup=menu)
     # Помощь
     elif message.text == "/help":
-        bot.send_message(message.from_user.id,
-                         "Я могу тебе показать аккорд, тебе осталось только его написать подсказка:Лучше писать английскими")
+        bot.send_message(message.chat.id, "Я могу тебе показать аккорд, тебе осталось только его написать подсказка:Лучше писать английскими")
     # Прощание
     elif b == "Попрощаться":
         buying = random.choice(list(user_inp[2]))
         bot.send_message(message.chat.id, buying, reply_markup=welcome)
         stick_by(message)
     else:
-        bot.send_message(message.from_user.id,
+        bot.send_message(message.chat.id,
                          "Я тебя не понял, если тебе что то не понятно напиши /help, а если ты хочешь начать общение то просто "
                          "поздоровайся со мной:)")
 
 
 # Обратная связь с ботом
-bot.polling(interval=2)
+bot.infinity_polling(long_polling_timeout=10, interval=2)
