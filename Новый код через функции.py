@@ -43,7 +43,7 @@ ak = types.KeyboardButton("Аккорды")
 boi = types.KeyboardButton("Бой")
 ret = types.KeyboardButton("Вернуться")
 welcome.add(hi)
-akkords.add(a, d, e, f, g, h, c, ret)
+akkords.add(a, d, e, f, g, h, c, em, dm, am, ret)
 A.add(a, am)
 D.add(d, dm)
 E.add(em, e)
@@ -205,9 +205,8 @@ def get_text_messages(message):
     if b == "/start" or b == "Поздороваться":
         welcoming(message)
     elif b == "Викторина":
-        """bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
-        stick_dep(message)"""
-        vikt(message)
+        bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
+        stick_dep(message)
     # Вывод боя и выбор
     elif b == "Бой":
         bot.send_message(message.chat.id, "Выбирай бой", reply_markup=boy)
