@@ -5,7 +5,7 @@ from telebot import time
 from telebot import types
 
 # Токен
-bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c', protect_content=True)
+bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
 
 # Создание менюшки
 welcome = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -20,7 +20,6 @@ F = types.ReplyKeyboardMarkup(resize_keyboard=True)
 G = types.ReplyKeyboardMarkup(resize_keyboard=True)
 H = types.ReplyKeyboardMarkup(resize_keyboard=True)
 C = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
 
 # Создание кнопок для выбора
 hi = types.KeyboardButton("Поздороваться")
@@ -51,7 +50,7 @@ F.add(f)
 G.add(g)
 H.add(h)
 C.add(c)
-vik.add(c, d, e, em, f, g, a, h, am, ret)
+vik.add(c, d, e, em, f, g, a, h, am, dm, ret)
 boy.add(ch, sh, vos, ret)
 menu.add(ak, boi, vekt, by)
 
@@ -74,7 +73,6 @@ for_vict = {
     "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Am.png"
 }
 
-
 # Создание словаря картинок
 akk = {
     'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\С\C.png',
@@ -90,7 +88,6 @@ akk = {
     "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\H\H.png",
     "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\A\Am.png"
 }
-
 
 bo = {
     "Четверка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Shlepa\boy\kg5.png',
@@ -118,6 +115,7 @@ stick = {
 
 
 # Приветствие
+@bot.message_handler(['start', 'help'])
 def welcoming(message):
     if message.text == "/start":
         bot.send_message(message.chat.id,
@@ -128,6 +126,10 @@ def welcoming(message):
         hi_2 = random.choice(list(user_inp[1]))
         bot.send_message(message.chat.id, hi_2, reply_markup=menu)
         stick_hi(message)
+    elif message.text == "/help":
+        bot.send_message(message.chat.id,
+                         "Что-то пошло не так, если тебе что то не понятно напиши /help, а если ты хочешь начать общение то просто "
+                         "напиши /start или нажми кнопку Поздороваться:)")
 
 
 # Функции чтобы одни и те же стикеры не повторялись много раз и для их отправки
@@ -170,44 +172,41 @@ def stick_by(message):
     used_stick_by.append(old_by)
 
 
-# Создание викторины
+@bot.message_handler(content_types=['text'])
 def vikt(message):
     bot.send_message(message.chat.id, "Итак, викторина.", reply_markup=vik)
-    bot.send_message(message.chat.id, "Правила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
+    bot.send_message(message.chat.id,
+                     "Правила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
     live = 3
     count = 0
-    while live > 0 or message.text != "Вернуться":
+    if live > 0:
         answer = random.choice(list(for_vict))
         ind = for_vict[answer]
         bot.send_photo(message.chat.id, open(ind, "rb"))
         bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=akkords)
         print(answer)
         # Ожидание бота ответа от пользователя
-        time.sleep(5)
-        bot.get_updates()
         if message.text == answer:
             bot.send_message(message.chat.id, "Правильно!")
             count += 1
-        elif message.text != answer:
-            bot.send_message(message.chat.id, "Неправильно")
-            live -= 1
-        if live == 0:
+        elif live == 0 or message.text == "Вернуться":
             bot.send_message(message.chat.id, f"Ты проиграл, количество правильных ответов:{count}",
                              reply_markup=menu)
+    else:
+        bot.send_message(message.chat.id, "Неправильно")
+        live -= 1
 
 
 # Сам код
 @bot.message_handler(content_types=['text', 'audio', 'photo', 'video', 'document'])
 def get_text_messages(message):
     b = message.text.title()
-    # Начало и приветствие бота
-    if message.text == "/start" or b == "Поздороваться":
+    if b == "Поздороваться":
         welcoming(message)
     elif b == "Викторина":
-        bot.send_message(message.from_user.id, "Викторина в данный момент разрабатывается")
-        stick_dep(message)
+        vikt(message)
     # Вывод боя и выбор
-    elif b == "Бой":
+    if b == "Бой":
         bot.send_message(message.chat.id, "Выбирай бой", reply_markup=boy)
         bot.send_message(message.chat.id, "Примечание: крестиком обозначается глушение ударом")
     elif b in bo:
@@ -215,7 +214,8 @@ def get_text_messages(message):
     # Вывод меню с аккордами
     elif b == "Аккорды":
         bot.send_message(message.chat.id, "Выбирай аккорд", reply_markup=akkords)
-        bot.send_message(message.chat.id, "Примечание, крестиком обозначается струна которую нельзя трогать, а кружком просто открытая струна")
+        bot.send_message(message.chat.id,
+                         "Примечание, крестиком обозначается струна которую нельзя трогать, а кружком просто открытая струна")
     elif b in akk:
         bot.send_photo(message.chat.id, open(akk[b], "rb"))
     # Возврат к меню
@@ -223,16 +223,13 @@ def get_text_messages(message):
         bot.send_message(message.chat.id, "Выбери что тебе нужно :)", reply_markup=menu)
     # Помощь
     elif message.text == "/help":
-        bot.send_message(message.chat.id, "Я могу тебе показать аккорд, тебе осталось только его написать подсказка:Лучше писать английскими")
+        bot.send_message(message.chat.id,
+                         "Я могу тебе показать аккорд или бой, тебе осталось только его выбрать нажимая кнопки внизу")
     # Прощание
     elif b == "Попрощаться":
         buying = random.choice(list(user_inp[2]))
         bot.send_message(message.chat.id, buying, reply_markup=welcome)
         stick_by(message)
-    else:
-        bot.send_message(message.chat.id,
-                         "Что-то пошло не так, если тебе что то не понятно напиши /help, а если ты хочешь начать общение то просто "
-                         "напиши Поздороваться:)")
 
 
 # Обратная связь с ботом
