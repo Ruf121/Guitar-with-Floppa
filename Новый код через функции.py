@@ -1,8 +1,9 @@
 import random
+from telebot import time
 
 import telebot
-from telebot import time
 from telebot import types
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, KeyboardButtonPollType
 
 # Токен
 bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
@@ -12,7 +13,7 @@ welcome = types.ReplyKeyboardMarkup(resize_keyboard=True)
 menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 akkords = types.ReplyKeyboardMarkup(resize_keyboard=True)
 boy = types.ReplyKeyboardMarkup(resize_keyboard=True)
-vik = types.ReplyKeyboardMarkup(resize_keyboard=True)
+vik = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 A = types.ReplyKeyboardMarkup(resize_keyboard=True)
 D = types.ReplyKeyboardMarkup(resize_keyboard=True)
 E = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -20,7 +21,7 @@ F = types.ReplyKeyboardMarkup(resize_keyboard=True)
 G = types.ReplyKeyboardMarkup(resize_keyboard=True)
 H = types.ReplyKeyboardMarkup(resize_keyboard=True)
 C = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
+vik_quiz = types.InlineKeyboardMarkup()
 # Создание кнопок для выбора
 hi = types.KeyboardButton("Поздороваться")
 by = types.KeyboardButton("Попрощаться")
@@ -35,11 +36,11 @@ g = types.KeyboardButton("G")
 a = types.KeyboardButton("A")
 h = types.KeyboardButton("H")
 am = types.KeyboardButton("Am")
+ak = types.KeyboardButton("Аккорды")
+boi = types.KeyboardButton("Бой")
 ch = types.KeyboardButton("Четверка")
 sh = types.KeyboardButton("Шестерка")
 vos = types.KeyboardButton("Восьмерка")
-ak = types.KeyboardButton("Аккорды")
-boi = types.KeyboardButton("Бой")
 ret = types.KeyboardButton("Вернуться")
 welcome.add(hi)
 akkords.add(a, d, e, f, g, h, c, em, dm, am, ret)
@@ -53,6 +54,23 @@ C.add(c)
 vik.add(c, d, e, em, f, g, a, h, am, dm, ret)
 boy.add(ch, sh, vos, ret)
 menu.add(ak, boi, vekt, by)
+
+# Словарь для генерирования разных ответов в викторине
+vic_buttons = {
+    'c': types.InlineKeyboardButton("C"),
+    'd': types.InlineKeyboardButton("D"),
+    'dm': types.InlineKeyboardButton("Dm"),
+    'e': types.InlineKeyboardButton("E"),
+    'em': types.InlineKeyboardButton("Em"),
+    'f': types.InlineKeyboardButton("F"),
+    'g': types.InlineKeyboardButton("G"),
+    'a': types.InlineKeyboardButton("A"),
+    'h': types.InlineKeyboardButton("H"),
+    'am': types.InlineKeyboardButton("Am"),
+    'ch': types.InlineKeyboardButton("Четверка"),
+    'sh': types.InlineKeyboardButton("Шестерка"),
+    'vos': types.InlineKeyboardButton("Восьмерка"),
+}
 
 # Создание вариантов приветствия и прощания которые от бота
 user_inp = {
@@ -172,19 +190,40 @@ def stick_by(message):
     used_stick_by.append(old_by)
 
 
-@bot.message_handler(content_types=['text'])
+# Разобраться как создавать опрос
+def generator_of_quiz():
+    true_answer = random.choice(list(vic_buttons))
+    fake_answer1 = random.choice(list(vic_buttons))
+    fake_answer2 = random.choice(list(vic_buttons))
+    fake_answer3 = random.choice(list(vic_buttons))
+    vik_quiz.add(vic_buttons[true_answer], vic_buttons[fake_answer1], vic_buttons[fake_answer2], vic_buttons[fake_answer3])
+
+
 def vikt(message):
+    # poll_markup = ReplyKeyboardMarkup(one_time_keyboard=True)
+    # poll_markup.add(KeyboardButton('send me a poll',
+    #                                request_poll=KeyboardButtonPollType(type='quiz')))
+    # from my experience, only quiz type and regular type polls can be sent.
+
+    remove_board = ReplyKeyboardRemove()
+    # bot.send_message(message.chat.id, "Ку ку", reply_markup=vik_quiz)
+    # some other code here
+    # this can be used to remove the reply-keyboard when you no longer need it.
+    # bot.send_message(message.chat.id, "Что то", reply_markup=remove_board)
+    # time.sleep(15)
     bot.send_message(message.chat.id, "Итак, викторина.", reply_markup=vik)
     bot.send_message(message.chat.id,
                      "Правила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
     live = 3
     count = 0
-    if live > 0:
+    while live > 0:
+        generator_of_quiz()
         answer = random.choice(list(for_vict))
         ind = for_vict[answer]
         bot.send_photo(message.chat.id, open(ind, "rb"))
-        bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=akkords)
+        bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=vik_quiz)
         print(answer)
+        time.sleep(5)
         # Ожидание бота ответа от пользователя
         if message.text == answer:
             bot.send_message(message.chat.id, "Правильно!")
@@ -204,6 +243,8 @@ def get_text_messages(message):
     if b == "Поздороваться":
         welcoming(message)
     elif b == "Викторина":
+        # bot.send_message(message.chat.id, "Викторина в данный момент разрабатывается")
+        # stick_dep(message)
         vikt(message)
     # Вывод боя и выбор
     if b == "Бой":
