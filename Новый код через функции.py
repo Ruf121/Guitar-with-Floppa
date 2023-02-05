@@ -20,7 +20,7 @@ F = types.ReplyKeyboardMarkup(resize_keyboard=True)
 G = types.ReplyKeyboardMarkup(resize_keyboard=True)
 H = types.ReplyKeyboardMarkup(resize_keyboard=True)
 C = types.ReplyKeyboardMarkup(resize_keyboard=True)
-vik_quiz = types.InlineKeyboardMarkup()
+
 # Создание кнопок для выбора
 hi = types.KeyboardButton("Поздороваться")
 by = types.KeyboardButton("Попрощаться")
@@ -208,18 +208,10 @@ def stick_by(message):
 
 
 # Разобраться как создавать опрос
-def generator_of_quiz():
-    global true_answer
-    global answer
-    true_answer = random.choice(list(vic_buttons))
-    fake_answer1 = random.choice(list(vic_buttons))
-    fake_answer2 = random.choice(list(vic_buttons))
-    fake_answer3 = random.choice(list(vic_buttons))
-    vik_quiz.add(types.InlineKeyboardButton(text=true_answer, callback_data=true_answer))
-    vik_quiz.add(types.InlineKeyboardButton(text=fake_answer1, callback_data=fake_answer1))
-    vik_quiz.add(types.InlineKeyboardButton(text=fake_answer2, callback_data=fake_answer2))
-    vik_quiz.add(types.InlineKeyboardButton(text=fake_answer3, callback_data=fake_answer3))
-    answer = true_answer
+# def generator_of_quiz():
+#     global true_answer
+#     global answer
+#
 
 
 def vikt(message):
@@ -230,7 +222,17 @@ def vikt(message):
     live = 3
     count = 0
     while live > 0:
-        generator_of_quiz()
+        vik_quiz = types.InlineKeyboardMarkup()
+        true_answer = random.choice(list(vic_buttons))
+        fake_answer1 = random.choice(list(vic_buttons))
+        fake_answer2 = random.choice(list(vic_buttons))
+        fake_answer3 = random.choice(list(vic_buttons))
+        vik_quiz.add(types.InlineKeyboardButton(text=true_answer, callback_data=true_answer))
+        vik_quiz.add(types.InlineKeyboardButton(text=fake_answer1, callback_data=fake_answer1))
+        vik_quiz.add(types.InlineKeyboardButton(text=fake_answer2, callback_data=fake_answer2))
+        vik_quiz.add(types.InlineKeyboardButton(text=fake_answer3, callback_data=fake_answer3))
+        answer = true_answer
+        # generator_of_quiz()
 #        answer = random.choice(list(for_vict))
         ind = for_vict[answer]
         bot.send_photo(message.chat.id, open(ind, "rb"))
