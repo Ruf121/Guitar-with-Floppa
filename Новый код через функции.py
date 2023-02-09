@@ -1,7 +1,7 @@
 import random
+import time
 
 import telebot
-from telebot import time, callback_data
 from telebot import types
 
 # Токен
@@ -24,7 +24,6 @@ C = types.ReplyKeyboardMarkup(resize_keyboard=True)
 # Создание кнопок для выбора
 hi = types.KeyboardButton("Поздороваться")
 by = types.KeyboardButton("Попрощаться")
-vekt = types.KeyboardButton("Викторина")
 c = types.KeyboardButton("C")
 d = types.KeyboardButton("D")
 dm = types.KeyboardButton("Dm")
@@ -35,6 +34,7 @@ g = types.KeyboardButton("G")
 a = types.KeyboardButton("A")
 h = types.KeyboardButton("H")
 am = types.KeyboardButton("Am")
+vekt = types.InlineKeyboardButton("Викторина", callback_data="Викторина")
 ak = types.KeyboardButton("Аккорды")
 boi = types.KeyboardButton("Бой")
 ch = types.KeyboardButton("Четверка")
@@ -50,9 +50,9 @@ F.add(f)
 G.add(g)
 H.add(h)
 C.add(c)
-vik.add(c, d, e, em, f, g, a, h, am, dm, ret)
+vik.add(ret)
 boy.add(ch, sh, vos, ret)
-menu.add(ak, boi, vekt, by)
+menu.add(ak, boi, vekt)
 
 # Словарь для генерирования разных ответов в викторине
 vic_buttons = {
@@ -66,9 +66,6 @@ vic_buttons = {
     'A': types.InlineKeyboardButton("A"),
     'H': types.InlineKeyboardButton("H"),
     'Am': types.InlineKeyboardButton("Am"),
-    'Четверка': types.InlineKeyboardButton("Четверка"),
-    'Шестерка': types.InlineKeyboardButton("Шестерка"),
-    'Восьмерка': types.InlineKeyboardButton("Восьмерка"),
 }
 
 # Создание вариантов приветствия и прощания которые от бота
@@ -78,19 +75,16 @@ user_inp = {
 }
 
 for_vict = {
-    'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\С.jpg',
-    'D': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\D.png",
+    'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\C.jpg',
+    'D': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\D.jpg",
+    'Dm': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Dm.jpg',
     'E': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\E.jpg",
-    'Em': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\em.jpg",
-    "F": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\f-major.png",
-    "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\g.jpg",
-    "Dm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Dm.png",
-    "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\A.png",
+    'Em': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Em.jpg",
+    "F": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\F.jpg",
+    "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\G.jpg",
+    "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\A.jpg",
     "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\H.jpg",
-    "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Am.png",
-    "Четверка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\boy\Chetverka.jpg',
-    "Шестерка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\boy\Shesterka.jpg',
-    "Восьмерка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\boy\Vosmerka.jpg'
+    "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Am.jpg"
 }
 
 # Создание словаря картинок
@@ -151,7 +145,7 @@ def welcoming(message):
         stick_scared(message)
         bot.send_message(message.chat.id,
                          "Что-то пошло не так, если тебе что то не понятно напиши /help, а если ты хочешь начать общение то просто "
-                         "напиши /start или нажми кнопку Поздороваться:)")
+                         "напиши /start или нажми кнопку Поздороваться\n:)")
 
 
 # Функции чтобы одни и те же стикеры не повторялись много раз и для их отправки
@@ -207,52 +201,51 @@ def stick_by(message):
     used_stick.append(old_by)
 
 
-# Разобраться как создавать опрос
-# def generator_of_quiz():
-#     global true_answer
-#     global answer
-#
-
-
-def vikt(message):
-    # time.sleep(15)
-    bot.send_message(message.chat.id, "Итак, викторина.", reply_markup=vik)
-    bot.send_message(message.chat.id,
-                     "Правила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
-    live = 3
+@bot.callback_query_handler(func=lambda query: True)
+def check_answer(query):
+    global data, live, count
+    # Get the data from the query
+    data = query.data
     count = 0
-    while live > 0:
-        vik_quiz = types.InlineKeyboardMarkup()
-        true_answer = random.choice(list(vic_buttons))
-        fake_answer1 = random.choice(list(vic_buttons))
-        fake_answer2 = random.choice(list(vic_buttons))
-        fake_answer3 = random.choice(list(vic_buttons))
-        vik_quiz.add(types.InlineKeyboardButton(text=true_answer, callback_data=true_answer))
-        vik_quiz.add(types.InlineKeyboardButton(text=fake_answer1, callback_data=fake_answer1))
-        vik_quiz.add(types.InlineKeyboardButton(text=fake_answer2, callback_data=fake_answer2))
-        vik_quiz.add(types.InlineKeyboardButton(text=fake_answer3, callback_data=fake_answer3))
-        answer = true_answer
-        # generator_of_quiz()
-#        answer = random.choice(list(for_vict))
-        ind = for_vict[answer]
-        bot.send_photo(message.chat.id, open(ind, "rb"))
-        bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=vik_quiz)
-        print(answer)
-        time.sleep(5)
-        # Ожидание бота ответа от пользователя
-        if callback_data == true_answer:
-            bot.send_message(message.chat.id, "Правильно!")
-            count += 1
-        elif live == 0 or message.text == "Вернуться":
-            bot.send_message(message.chat.id, f"Ты проиграл, количество правильных ответов:{count}",
-                             reply_markup=menu)
+    # Check if the answer is correct
+    if data == "Правильно!":
+        bot.send_message(query.message.chat.id, "Правильно!")
+        count += 1
     else:
-        bot.send_message(message.chat.id, "Неправильно")
+        bot.send_message(query.message.chat.id, "Неправильно :(")
         live -= 1
 
 
+# Код для викторины
+def vikt(message):
+    bot.send_message(message.chat.id, "Итак, викторина. \nПравила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой", reply_markup=vik)
+    live = 3
+    for image in for_vict:
+        vik_quiz = types.InlineKeyboardMarkup()
+        true_answer = for_vict[image]
+        fake_answer1 = random.choice(list(vic_buttons))
+        fake_answer2 = random.choice(list(vic_buttons))
+        fake_answer3 = random.choice(list(vic_buttons))
+        vik_quiz.add(types.InlineKeyboardButton(text=image, callback_data="Правильно!"))
+        vik_quiz.add(types.InlineKeyboardButton(text=fake_answer1, callback_data="Неправильно :("))
+        vik_quiz.add(types.InlineKeyboardButton(text=fake_answer2, callback_data="Неправильно :("))
+        vik_quiz.add(types.InlineKeyboardButton(text=fake_answer3, callback_data="Неправильно :("))
+        bot.send_photo(message.chat.id, open(true_answer, "rb"))
+        bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=vik_quiz)
+        print(true_answer)
+        print(message.text)
+        time.sleep(5)
+        if message.text == "Вернуться":
+            get_text_messages(message)
+        # elif live == 0:
+        #     get_text_messages(message)
+        elif live == 0:
+            bot.send_message(f"Количество жизней закончилось.\n Ты угадал {count} аккордов")
+            get_text_messages(message)
+
+
 # Сам код
-@bot.message_handler(content_types=['text'])
+@bot.message_handler(func=lambda message: True, content_types=['text'])
 def get_text_messages(message):
     b = message.text.title()
     if b == "Поздороваться" or message.text == '/start':
@@ -263,15 +256,12 @@ def get_text_messages(message):
         vikt(message)
     # Вывод боя и выбор
     if b == "Бой":
-        bot.send_message(message.chat.id, "Выбирай бой", reply_markup=boy)
-        bot.send_message(message.chat.id, "Примечание: крестиком обозначается глушение ударом")
+        bot.send_message(message.chat.id, "Выбирай бой \nПримечание: крестиком обозначается глушение ударом", reply_markup=boy)
     elif b in bo:
         bot.send_photo(message.chat.id, open(bo[b], "rb"))
     # Вывод меню с аккордами
     elif b == "Аккорды":
-        bot.send_message(message.chat.id, "Выбирай аккорд", reply_markup=akkords)
-        bot.send_message(message.chat.id,
-                         "Примечание, крестиком обозначается струна которую нельзя трогать, а кружком просто открытая струна")
+        bot.send_message(message.chat.id, "Выбирай аккорд \nПримечание, крестиком обозначается струна которую нельзя трогать, а кружком просто открытая струна", reply_markup=akkords)
     elif b in akk:
         bot.send_photo(message.chat.id, open(akk[b], "rb"))
     # Возврат к меню
