@@ -246,10 +246,11 @@ def vikt(message):
             count = 0
             break
         elif live == 0:
-            bot.send_message(message.chat.id, text=f"Количество жизней закончилось.\n Ты угадал {count} аккордов")
+            bot.send_message(message.chat.id, text=f"Количество жизней закончилось.\n Ты угадал {count} аккордов", reply_markup=menu)
             live = 3
             count = 0
             break
+    message.text = ""
     get_text_messages(message)
 
 
@@ -260,9 +261,9 @@ def get_text_messages(message):
     if b == "Поздороваться" or message.text == '/start':
         welcoming(message)
     elif b == "Викторина":
-        bot.send_message(message.chat.id, "Викторина в данный момент разрабатывается")
-        stick_dep(message)
-        # vikt(message)
+        # bot.send_message(message.chat.id, "Викторина в данный момент разрабатывается")
+        # stick_dep(message)
+        vikt(message)
     # Вывод боя и выбор
     if b == "Бой":
         bot.send_message(message.chat.id, "Выбирай бой \nПримечание: крестиком обозначается глушение ударом",
