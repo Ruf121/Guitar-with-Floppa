@@ -1,6 +1,5 @@
 import random
 import time
-
 import telebot
 from telebot import types
 
@@ -12,7 +11,7 @@ welcome = types.ReplyKeyboardMarkup(resize_keyboard=True)
 menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 akkords = types.ReplyKeyboardMarkup(resize_keyboard=True)
 boy = types.ReplyKeyboardMarkup(resize_keyboard=True)
-vik = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+back = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 A = types.ReplyKeyboardMarkup(resize_keyboard=True)
 D = types.ReplyKeyboardMarkup(resize_keyboard=True)
 E = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -53,7 +52,7 @@ C.add(c)
 # vik.add(ret)
 boy.add(ch, sh, vos, ret)
 menu.add(ak, boi, by, vekt)
-
+back.add(ret)
 # Словарь для генерирования разных ответов в викторине
 vic_buttons = {
     'C': types.InlineKeyboardButton("C"),
@@ -212,10 +211,10 @@ def check_answer(query):
     data = query.data
     print(data)
     # Проверка на правильность ответа
-    if data == "Правильно!":
+    if data == 'Правильно!':
         bot.send_message(query.message.chat.id, "Правильно!")
         count += 1
-    elif data == "":
+    elif data is None:
         bot.send_message(query.message.chat.id, "Долго думал))")
         live -= 1
     else:
@@ -227,7 +226,8 @@ def check_answer(query):
 def vikt(message):
     global live, count
     bot.send_message(message.chat.id,
-                     "Итак, викторина. \nПравила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
+                     "Итак, викторина. \nПравила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой",
+                     reply_markup=back)
     # reply_markup=vik)
     while message != "Вернуться" or live > 0:
         vik_quiz = types.InlineKeyboardMarkup()
@@ -241,19 +241,27 @@ def vikt(message):
         vik_answers.append(fake_answer2)
         vik_answers.append(fake_answer3)
         random.shuffle(vik_answers)
+        for i in range(0, 3):
+            if vik_answers[i] == vik_answers[i + 1]:
+                vik_answers[i + 1] = random.choice(list(vic_buttons))
+        true_ind = vik_answers.index(true_answer)
         print(vik_answers)
-        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[0], callback_data=vik_answers[0]))
-        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[1], callback_data=vik_answers[1]))
-        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[2], callback_data=vik_answers[2]))
-        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[3], callback_data=vik_answers[3]))
+        print(true_answer)
+        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[0],
+                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
+                                                    0] else 'Неправильно!'))
+        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[1],
+                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
+                                                    1] else 'Неправильно!'))
+        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[2],
+                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
+                                                    2] else 'Неправильно!'))
+        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[3],
+                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
+                                                    3] else 'Неправильно!'))
         bot.send_photo(message.chat.id, open(for_vict[true_answer], "rb"))
         bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=vik_quiz)
-        time.sleep(5)
-        # if message.text == "Вернуться":
-        #     live = 0
-        #     count = 0
-        #     bot.send_message(message.chat.id, "Выбери что тебе нужно :)", reply_markup=menu)
-        #     break
+        time.sleep(4)
         if live == 0:
             bot.send_message(message.chat.id, text=f"Количество жизней закончилось.\n Ты угадал {count} аккордов",
                              reply_markup=menu)
