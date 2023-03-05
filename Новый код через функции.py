@@ -29,9 +29,12 @@ dm = types.KeyboardButton("Dm")
 e = types.KeyboardButton("E")
 em = types.KeyboardButton("Em")
 f = types.KeyboardButton("F")
+fm = types.KeyboardButton("Fm")
+f_m = types.KeyboardButton("F#m")
 g = types.KeyboardButton("G")
 a = types.KeyboardButton("A")
 h = types.KeyboardButton("H")
+hm = types.KeyboardButton("Hm")
 am = types.KeyboardButton("Am")
 vekt = types.InlineKeyboardButton("Викторина", callback_data="Викторина")
 ak = types.KeyboardButton("Аккорды")
@@ -41,7 +44,7 @@ sh = types.KeyboardButton("Шестерка")
 vos = types.KeyboardButton("Восьмерка")
 ret = types.KeyboardButton("Вернуться")
 welcome.add(hi)
-akkords.add(a, d, e, f, g, h, c, em, dm, am, ret)
+akkords.add(a, d, e, f, fm, f_m, g, h, hm, c, em, dm, am, ret)
 A.add(a, am)
 D.add(d, dm)
 E.add(em, e)
@@ -61,9 +64,12 @@ vic_buttons = {
     'E': types.InlineKeyboardButton("E"),
     'Em': types.InlineKeyboardButton("Em"),
     'F': types.InlineKeyboardButton("F"),
+    'Fm': types.InlineKeyboardButton("Fm"),
+    'F#m': types.InlineKeyboardButton("F#m"),
     'G': types.InlineKeyboardButton("G"),
     'A': types.InlineKeyboardButton("A"),
     'H': types.InlineKeyboardButton("H"),
+    'Hm': types.InlineKeyboardButton("Hm"),
     'Am': types.InlineKeyboardButton("Am"),
 }
 
@@ -80,9 +86,12 @@ for_vict = {
     'E': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\E.jpg",
     'Em': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Em.jpg",
     "F": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\F.jpg",
+    "Fm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Fm.jpg",
+    "F#m": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\F#m.jpg",
     "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\G.jpg",
     "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\A.jpg",
     "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\H.jpg",
+    "Hm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Fm.jpg",
     "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Am.jpg"
 }
 
@@ -94,9 +103,12 @@ akk = {
     'E': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\E\E.jpg",
     'Em': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\E\Em.jpg",
     "F": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\F\F.jpg",
+    "Fm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\F\Fm.jpg",
+    "F#M": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\F\F#m.jpg",
     "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\G\G.jpg",
     "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\A\A.jpg",
     "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\H\H.jpg",
+    "Hm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\H\Hm.jpg",
     "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\A\Am.jpg"
 }
 
@@ -209,7 +221,7 @@ def check_answer(query):
     global live, count
     # Получение ответа
     data = query.data
-    print(data)
+    print(f'-{data}-')
     # Проверка на правильность ответа
     if data == 'Правильно!':
         bot.send_message(query.message.chat.id, "Правильно!")
@@ -226,8 +238,7 @@ def check_answer(query):
 def vikt(message):
     global live, count
     bot.send_message(message.chat.id,
-                     "Итак, викторина. \nПравила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой",
-                     reply_markup=back)
+                     "Итак, викторина. \nПравила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
     # reply_markup=vik)
     while message != "Вернуться" or live > 0:
         vik_quiz = types.InlineKeyboardMarkup()
@@ -244,6 +255,10 @@ def vikt(message):
         for i in range(0, 3):
             if vik_answers[i] == vik_answers[i + 1]:
                 vik_answers[i + 1] = random.choice(list(vic_buttons))
+            elif vik_answers[i] == vik_answers[i - 1]:
+                vik_answers[i] = random.choice(list(vic_buttons))
+            else:
+                pass
         true_ind = vik_answers.index(true_answer)
         print(vik_answers)
         print(true_answer)
@@ -261,11 +276,18 @@ def vikt(message):
                                                     3] else 'Неправильно!'))
         bot.send_photo(message.chat.id, open(for_vict[true_answer], "rb"))
         bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=vik_quiz)
-        time.sleep(4)
+        time.sleep(5)
         if live == 0:
-            bot.send_message(message.chat.id, text=f"Количество жизней закончилось.\n Ты угадал {count} аккордов",
+            bot.send_message(message.chat.id, text=f"Количество жизней закончилось.\n Ты угадал аккордов: {count}",
                              reply_markup=menu)
             count = 0
+            break
+        elif count == len(for_vict):
+            pass
+            bot.send_message(message.chat.id, text=f"Поздравляю, ты угадал все аккорды!\n У тебя осталось жизней: {live}",
+                             reply_markup=menu)
+            count = 0
+            live = 0
             break
     message.text = ""
     get_text_messages(message)
@@ -290,7 +312,7 @@ def get_text_messages(message):
     # Вывод меню с аккордами
     elif b == "Аккорды":
         bot.send_message(message.chat.id,
-                         "Выбирай аккорд \nПримечание, крестиком обозначается струна которую нельзя трогать, а кружком просто открытая струна",
+                         "Выбирай аккорд",
                          reply_markup=akkords)
     elif b in akk:
         bot.send_photo(message.chat.id, open(akk[b], "rb"))
