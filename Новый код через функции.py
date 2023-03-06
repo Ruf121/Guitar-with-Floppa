@@ -222,9 +222,6 @@ def check_answer(query):
     if data == 'Правильно!':
         bot.send_message(query.message.chat.id, "Правильно!")
         count += 1
-    elif data is None:
-        bot.send_message(query.message.chat.id, "Долго думал))")
-        live -= 1
     else:
         bot.send_message(query.message.chat.id, "Неправильно :(")
         live -= 1
@@ -249,16 +246,17 @@ def vikt(message):
         vik_answers.append(fake_answer3)
         random.shuffle(vik_answers)
         for i in range(0, 4):
-            if vik_answers[0] == vik_answers[i] and i != 0:
+            if vik_answers[0] == vik_answers[i] and i != 0 and vik_answers[0] != true_answer:
                 vik_answers[i] = random.choice(list(vic_buttons))
-            elif vik_answers[1] == vik_answers[i] and i != 1:
+            elif vik_answers[1] == vik_answers[i] and i != 1 and vik_answers[1] != true_answer:
                 vik_answers[i] = random.choice(list(vic_buttons))
-            elif vik_answers[2] == vik_answers[i] and i != 2:
+            elif vik_answers[2] == vik_answers[i] and i != 2 and vik_answers[2] != true_answer:
                 vik_answers[i] = random.choice(list(vic_buttons))
-            elif vik_answers[3] == vik_answers[i] and i != 3:
+            elif vik_answers[3] == vik_answers[i] and i != 3 and vik_answers[3] != true_answer:
                 vik_answers[i] = random.choice(list(vic_buttons))
             else:
                 pass
+
         true_ind = vik_answers.index(true_answer)
         vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[0],
                                                 callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
