@@ -52,7 +52,6 @@ F.add(f)
 G.add(g)
 H.add(h)
 C.add(c)
-# vik.add(ret)
 boy.add(ch, sh, vos, ret)
 menu.add(ak, boi, by, vekt)
 back.add(ret)
@@ -91,7 +90,7 @@ for_vict = {
     "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\G.jpg",
     "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\A.jpg",
     "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\H.jpg",
-    "Hm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Fm.jpg",
+    "Hm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Hm.jpg",
     "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Am.jpg"
 }
 
@@ -111,7 +110,7 @@ akk = {
     "Hm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\H\Hm.jpg",
     "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\A\Am.jpg"
 }
-
+perebor = {}
 bo = {
     "Четверка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\boy\Chetverka.jpg',
     "Шестерка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\boy\Shesterka.jpg',
@@ -139,6 +138,8 @@ stick = {
                'CAACAgIAAxkBAAEHl0Fj3sj0mePpU5ehcdyl7zf6P4UsjwACIh8AAs7wEEsQpDtCO8Q8rS4E',
                'CAACAgIAAxkBAAEHl0Nj3snJfe6U7gS48bkjAAFZkwbF3XUAAjkjAALSO3BKN-IZU2C_-P4uBA']
 }
+# Словарь с видеоуроками
+video = {}
 
 
 # Приветствие
@@ -152,11 +153,6 @@ def welcoming(message):
         hi_2 = random.choice(list(user_inp[1]))
         bot.send_message(message.chat.id, hi_2, reply_markup=menu)
         stick_hi(message)
-    else:
-        stick_scared(message)
-        bot.send_message(message.chat.id,
-                         "Что-то пошло не так, если тебе что то не понятно напиши /help, а если ты хочешь начать общение то просто "
-                         "напиши /start или нажми кнопку Поздороваться\n:)")
 
 
 # Функции чтобы одни и те же стикеры не повторялись много раз и для их отправки
@@ -252,16 +248,18 @@ def vikt(message):
         vik_answers.append(fake_answer2)
         vik_answers.append(fake_answer3)
         random.shuffle(vik_answers)
-        for i in range(0, 3):
-            if vik_answers[i] == vik_answers[i + 1]:
-                vik_answers[i + 1] = random.choice(list(vic_buttons))
-            elif vik_answers[i] == vik_answers[i - 1]:
+        for i in range(0, 4):
+            if vik_answers[0] == vik_answers[i] and i != 0:
+                vik_answers[i] = random.choice(list(vic_buttons))
+            elif vik_answers[1] == vik_answers[i] and i != 1:
+                vik_answers[i] = random.choice(list(vic_buttons))
+            elif vik_answers[2] == vik_answers[i] and i != 2:
+                vik_answers[i] = random.choice(list(vic_buttons))
+            elif vik_answers[3] == vik_answers[i] and i != 3:
                 vik_answers[i] = random.choice(list(vic_buttons))
             else:
                 pass
         true_ind = vik_answers.index(true_answer)
-        print(vik_answers)
-        print(true_answer)
         vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[0],
                                                 callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
                                                     0] else 'Неправильно!'))
@@ -282,21 +280,25 @@ def vikt(message):
                              reply_markup=menu)
             count = 0
             break
-        elif count == len(for_vict):
-            pass
-            bot.send_message(message.chat.id, text=f"Поздравляю, ты угадал все аккорды!\n У тебя осталось жизней: {live}",
-                             reply_markup=menu)
-            count = 0
-            live = 0
-            break
     message.text = ""
     get_text_messages(message)
+
+
+# Функция которая отправляет пользователю видеоуроки
+def video(message):
+    pass
+    bot.send_video(video=video[message], chat_id=message.chat.id)
 
 
 # Сам код
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def get_text_messages(message):
     b = message.text.title()
+    print('-' * 100)
+    print({bot.user})
+    print(b)
+    print(message.chat.id)
+    print(message.chat)
     if b == "Поздороваться" or message.text == '/start':
         welcoming(message)
     elif b == "Викторина":
@@ -305,20 +307,22 @@ def get_text_messages(message):
         vikt(message)
     # Вывод боя и выбор
     if b == "Бой":
-        bot.send_message(message.chat.id, "Выбирай бой \nПримечание: крестиком обозначается глушение ударом",
+        bot.send_message(message.chat.id, "Выбирай бой",
                          reply_markup=boy)
     elif b in bo:
         bot.send_photo(message.chat.id, open(bo[b], "rb"))
     # Вывод меню с аккордами
     elif b == "Аккорды":
         bot.send_message(message.chat.id,
-                         "Выбирай аккорд",
+                         "Выбирай аккорд\n Крестиком обозначается струна по которой бить нельзя",
                          reply_markup=akkords)
     elif b in akk:
         bot.send_photo(message.chat.id, open(akk[b], "rb"))
     # Возврат к меню
     elif b == "Вернуться":
         bot.send_message(message.chat.id, "Выбери что тебе нужно :)", reply_markup=menu)
+    # elif b == "Видеоуроки":
+    #     video(message)
     # Помощь
     elif message.text == "/help":
         bot.send_message(message.chat.id,
