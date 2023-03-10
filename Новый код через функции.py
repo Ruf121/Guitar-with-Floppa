@@ -1,5 +1,6 @@
 import random
 import time
+
 import telebot
 from telebot import types
 
@@ -8,6 +9,7 @@ bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
 
 # Создание менюшки
 welcome = types.ReplyKeyboardMarkup(resize_keyboard=True)
+vid_menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 akkords = types.ReplyKeyboardMarkup(resize_keyboard=True)
 boy = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -37,6 +39,8 @@ h = types.KeyboardButton("H")
 hm = types.KeyboardButton("Hm")
 am = types.KeyboardButton("Am")
 vekt = types.InlineKeyboardButton("Викторина", callback_data="Викторина")
+video_lessons = types.KeyboardButton("Видеоуроки")
+les_1 = types.InlineKeyboardButton("1", callback_data='1')
 ak = types.KeyboardButton("Аккорды")
 boi = types.KeyboardButton("Бой")
 ch = types.KeyboardButton("Четверка")
@@ -45,6 +49,7 @@ vos = types.KeyboardButton("Восьмерка")
 ret = types.KeyboardButton("Вернуться")
 welcome.add(hi)
 akkords.add(a, d, e, f, fm, f_m, g, h, hm, c, em, dm, am, ret)
+vid_menu.add(les_1, ret)
 A.add(a, am)
 D.add(d, dm)
 E.add(em, e)
@@ -79,42 +84,42 @@ user_inp = {
 }
 
 for_vict = {
-    'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\C.jpg',
-    'D': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\D.jpg",
-    'Dm': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Dm.jpg',
-    'E': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\E.jpg",
-    'Em': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Em.jpg",
-    "F": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\F.jpg",
-    "Fm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Fm.jpg",
-    "F#m": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\F#m.jpg",
-    "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\G.jpg",
-    "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\A.jpg",
-    "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\H.jpg",
-    "Hm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Hm.jpg",
-    "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\for_vict\Am.jpg"
+    'C': r'for_vict/C.jpg',
+    'D': r"for_vict/D.jpg",
+    'Dm': r'for_vict/Dm.jpg',
+    'E': r"for_vict/E.jpg",
+    'Em': r"for_vict/Em.jpg",
+    "F": r"for_vict/F.jpg",
+    "Fm": r"for_vict/Fm.jpg",
+    "F#m": r"for_vict/F#m.jpg",
+    "G": r"for_vict/G.jpg",
+    "A": r"for_vict/A.jpg",
+    "H": r"for_vict/H.jpg",
+    "Hm": r"for_vict/Hm.jpg",
+    "Am": r"for_vict/Am.jpg"
 }
 
 # Создание словаря картинок
 akk = {
-    'C': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\С\C.jpg',
-    'D': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\D\D.jpg",
-    'Dm': r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\D\Dm.jpg',
-    'E': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\E\E.jpg",
-    'Em': r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\E\Em.jpg",
-    "F": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\F\F.jpg",
-    "Fm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\F\Fm.jpg",
-    "F#M": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\F\F#m.jpg",
-    "G": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\G\G.jpg",
-    "A": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\A\A.jpg",
-    "H": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\H\H.jpg",
-    "Hm": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\H\Hm.jpg",
-    "Am": r"C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\ak\A\Am.jpg"
+    'C': r'ak/С/C.jpg',
+    'D': r"ak/D/D.jpg",
+    'Dm': r'ak/D/Dm.jpg',
+    'E': r"ak/E/E.jpg",
+    'Em': r"ak/E/Em.jpg",
+    "F": r"ak/F/F.jpg",
+    "Fm": r"ak/F/Fm.jpg",
+    "F#M": r"ak/F/F#m.jpg",
+    "G": r"ak/G/G.jpg",
+    "A": r"ak/A/A.jpg",
+    "Am": r"ak/A/Am.jpg",
+    "H": r"ak/H/H.jpg",
+    "Hm": r"ak/H/Hm.jpg"
 }
 perebor = {}
 bo = {
-    "Четверка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\boy\Chetverka.jpg',
-    "Шестерка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\boy\Shesterka.jpg',
-    "Восьмерка": r'C:\Users\KuzVL\OneDrive\Рабочий стол\Guitar-with-Floppa\boy\Vosmerka.jpg'
+    "Четверка": r'boy/Chetverka.jpg',
+    "Шестерка": r'boy/Shesterka.jpg',
+    "Восьмерка": r'boy/Vosmerka.jpg'
 }
 stick = {
     # Просто для того чтобы поздороваться
@@ -139,7 +144,7 @@ stick = {
                'CAACAgIAAxkBAAEHl0Nj3snJfe6U7gS48bkjAAFZkwbF3XUAAjkjAALSO3BKN-IZU2C_-P4uBA']
 }
 # Словарь с видеоуроками
-video = {}
+video = {'1': r''}
 
 
 # Приветствие
@@ -256,7 +261,6 @@ def vikt(message):
                 vik_answers[i] = random.choice(list(vic_buttons))
             else:
                 pass
-
         true_ind = vik_answers.index(true_answer)
         vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[0],
                                                 callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
@@ -280,12 +284,6 @@ def vikt(message):
             break
     message.text = ""
     get_text_messages(message)
-
-
-# Функция которая отправляет пользователю видеоуроки
-def video(message):
-    pass
-    bot.send_video(video=video[message], chat_id=message.chat.id)
 
 
 # Сам код
@@ -319,8 +317,11 @@ def get_text_messages(message):
     # Возврат к меню
     elif b == "Вернуться":
         bot.send_message(message.chat.id, "Выбери что тебе нужно :)", reply_markup=menu)
+    # Отправка видеоуроков пользователю(в будущем)
     # elif b == "Видеоуроки":
-    #     video(message)
+    #     bot.send_message(message.chat.id, "Выбирай урок", reply_markup=vid_menu)
+    # elif message.text in video:
+    #     bot.send_video(message.chat.id, open(video[b], 'rb'))
     # Помощь
     elif message.text == "/help":
         bot.send_message(message.chat.id,
