@@ -1,3 +1,4 @@
+import datetime
 import random
 import time
 
@@ -291,16 +292,17 @@ def vikt(message):
 def get_text_messages(message):
     b = message.text.title()
     print('-' * 100)
-    print({bot.user})
+    print(bot.user)
     print(b)
+    print(datetime.datetime.now())
     print(message.chat.id)
     print(message.chat)
     if b == "Поздороваться" or message.text == '/start':
         welcoming(message)
     elif b == "Викторина":
-        # bot.send_message(message.chat.id, "Викторина в данный момент разрабатывается")
-        # stick_dep(message)
-        vikt(message)
+        bot.send_message(message.chat.id, "Викторина в данный момент разрабатывается")
+        stick_dep(message)
+        # vikt(message)
     # Вывод боя и выбор
     if b == "Бой":
         bot.send_message(message.chat.id, "Выбирай бой",
