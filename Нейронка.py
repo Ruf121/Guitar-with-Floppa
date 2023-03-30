@@ -1,56 +1,47 @@
+import librosa
 import numpy as np
+import tensorflow as tf
 
-# Setting up the data
-# x: input data
-# y: labels for the data
-# each row in x is a chord and each row in y is the sound associated with that chord
+# Загрузить модель
+file_name = ''
+model = tf.keras.models.load_model(file_name + '.ogg')
 
-x = np.array([[0, 0, 0],
-              [1, 0, 0],
-              [0, 1, 0],
-              [1, 1, 1]])
+# Создать словарь, отображающий индекс аккорда в его название
+chord_idx = {0: 'C',
+             1: 'D',
+             2: 'Dm',
+             3: 'E',
+             4: 'F',
+             5: 'G',
+             6: 'A',
+             7: 'H',
+             8: 'Hm',
+             9: 'Am',
+             10: 'Cm',
+             11: 'C#m',
+             12: 'Em',
+             13: 'Fm',
+             14: 'Gm',
+             }
 
-y = np.array([[1],
-              [-1],
-              [1],
-              [-1]])
 
-# Setting up the neural network
-# Input layer
-input_layer_size = x.shape[1]
+# Функция, которая будет проходить через нейросеть, чтобы определить аккорд
+def classify_chord(file_path):
+    # Загрузить аудио файл и извлечь его функции mfcc
+    y, sr = librosa.load(file_path, mono=True, sr=None)
+    mfcc = librosa.feature.mfcc(y=y, sr=sr)
 
-# Hidden layer
-hidden_layer_size = 2
+    # Изменить размерность mfcc для использования в модели
+    mfcc = np.expand_dims(mfcc, axis=0)
+    mfcc = np.expand_dims(mfcc, axis=-1)
 
-# Weights between input and hidden layer
-W1 = np.random.randn(input_layer_size, hidden_layer_size)
+    # Передать mfcc через модель и получить индекс предсказанного аккорда
+    pred_idx = model.predict(mfcc).argmax(axis=-1)[0]
 
-# Weights between hidden and output layer
-W2 = np.random.randn(hidden_layer_size, 1)
+    # Получить соответствующее имя аккорда из словаря chord_idx
+    chord_name = chord_idx[pred_idx]
 
-# Learning rate
-learning_rate = 0.1
+    return chord_name
 
-# Training the network
-for epoch in range(10000):
-    # Forward Propagation
-    z1 = np.dot(x, W1)
-    a1 = np.tanh(z1)
-    z2 = np.dot(a1, W2)
-    a2 = np.tanh(z2)
 
-    # Calculating the error
-    error = a2 - y
-
-    # Backpropagation
-    delta2 = error * (1 - a2 ** 2)
-    delta1 = delta2.dot(W2.T) * (1 - a1 ** 2)
-
-    # Updating weights
-    W2 = W2 - learning_rate * a1.T.dot(delta2)
-    W1 = W1 - learning_rate * x.T.dot(delta1)
-
-# Make predictions
-predictions = np.tanh(np.dot(np.tanh(np.dot(x, W1)), W2))
-
-print(predictions)
+classify_chord(model)

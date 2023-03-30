@@ -1,134 +1,140 @@
 from aiogram import Bot, types
 from aiogram.utils import executor
-from aiogram.utils.markdown import text
 from aiogram.dispatcher import Dispatcher
-import kb as kb
+import random
+
 bot = Bot(token='5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
 dp = Dispatcher(bot)
 
+user_inp = {
+    1: ["Привет", "Ку", "Хай", "Здарова", "Здаров", "Даров", "Дарова", "Мое почтение"],
+    2: ["Пока", "Прощай", "Покеда", "До новых встреч", "Увидимся"]
+}
+akk = {
+    'C': r'ak/С/C.jpg',
+    'D': r"ak/D/D.jpg",
+    'Dm': r'ak/D/Dm.jpg',
+    'E': r"ak/E/E.jpg",
+    'Em': r"ak/E/Em.jpg",
+    "F": r"ak/F/F.jpg",
+    "Fm": r"ak/F/Fm.jpg",
+    "F#M": r"ak/F/F#m.jpg",
+    "G": r"ak/G/G.jpg",
+    "A": r"ak/A/A.jpg",
+    "Am": r"ak/A/Am.jpg",
+    "H": r"ak/H/H.jpg",
+    "Hm": r"ak/H/Hm.jpg"
+}
+stick = {
+    # Просто для того чтобы поздороваться
+    "hi": ['CAACAgIAAxkBAAEG5oVjoV1JA0tzCCkDEhqPGxbZ7-V80AACGSAAAkIxcEqOleNVc2Gz9CwE',
+           'CAACAgIAAxkBAAEHNh9jvwtrSG5d9ODVFwkAAdiSBMiyCZUAAmQiAALvQWlKaTmyyNstuMMtBA',
+           'CAACAgIAAxkBAAEHOcpjwFEe-dgckwclnbLrr6qay4mlkAAC8AoAAozKqUoAAfScFqvy1AItBA',
+           'CAACAgIAAxkBAAEHOcxjwFElfpJWFxvOaQKiQGdp9zOljgACLxAAAnEbqEo5-QrXpUyHMy0E',
+           'CAACAgIAAxkBAAEHOc5jwFEoLUiJ5jOwiyf8nwzhnh7D3AACCwsAAuHfqUpX01r7JW3ECC0E'],
+    # Стикеры с грустным или депрессивным Шлепой
+    "depr": ['CAACAgIAAxkBAAEG5odjoV9eePKBrLbItdphAtMYze31xQACECAAAmE0aErrMemvXMLY8ywE',
+             'CAACAgIAAxkBAAEHNhVjvwpxsTxcx2gXPSZZ9bUBnvr0bAACKA0AAtgkAAFJFu-IZGRz4XstBA',
+             'CAACAgIAAxkBAAEHNhdjvwp_v28JoV6n7-7J3mDG5im6bQACAxEAAoS74Ek3fGZjMbw2Zy0E',
+             'CAACAgIAAxkBAAEHNhNjvwpu_qY6Nutnc1Bv8QEKUT0ecAACJA8AAkF0MUtLbb06I1IVEy0E'],
 
-##
+    "by": ['CAACAgIAAxkBAAEHOdBjwFM8F7Ups61jlebM-vfZLyAqmwACFg0AAi5FMUvkjTAr0RfRUy0E',
+           'CAACAgIAAxkBAAEHOdFjwFM9Uk-tR7Uz8TBkjNvna6UAAaIAAkANAALRBuhKXBBwRgJRkoUtBA',
+           'CAACAgIAAxkBAAEHOdRjwFNbGhkVyTzAsVHYrezTqq3i5wAC3AwAArwyMEvpqHQDAcqfgC0E',
+           'CAACAgIAAxkBAAEHOdZjwFNinFXQJAABxmNTUAAB1y-vkt8vAAJnDAAC-xihS4JDjXDhj00DLQQ'],
+
+    "scared": ['CAACAgIAAxkBAAEHlx1j3r4VzuDiqh8zWKH9UCoRYd-o5gAC5goAAqEGoUpEgJAmKveTjy4E',
+               'CAACAgIAAxkBAAEHlz9j3sg62boThgL2BJa4x56x_TwsDwAC_gkAAijjMEsBHslhx99bIi4E',
+               'CAACAgIAAxkBAAEHl0Fj3sj0mePpU5ehcdyl7zf6P4UsjwACIh8AAs7wEEsQpDtCO8Q8rS4E',
+               'CAACAgIAAxkBAAEHl0Nj3snJfe6U7gS48bkjAAFZkwbF3XUAAjkjAALSO3BKN-IZU2C_-P4uBA']
+}
+bo = {
+    "Четверка": r'boy/Chetverka.jpg',
+    "Шестерка": r'boy/Shesterka.jpg',
+    "Восьмерка": r'boy/Vosmerka.jpg'
+}
 
 
-@dp.callback_query_handler(func=lambda c: c.data == 'button1')
-async def process_callback_button1(callback_query: types.CallbackQuery):
-    await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id, 'Нажата первая кнопка!')
+# Функции чтобы одни и те же стикеры не повторялись много раз и для их отправки
+async def stick_dep(message):
+    used_stick = []
+    chosen = random.choice(list(stick["depr"]))
+    old_depr = ''
+    while chosen == old_depr:
+        chosen = random.choice(list(stick["depr"]))
+    await bot.send_sticker(message.chat.id, chosen)
+    if len(used_stick) == 3:
+        used_stick.clear()
+    old_depr = chosen
+    used_stick.append(old_depr)
 
 
-@dp.callback_query_handler(func=lambda c: c.data and c.data.startswith('btn'))
-async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
-    code = callback_query.data[-1]
-    if code.isdigit():
-        code = int(code)
-    if code == 2:
-        await bot.answer_callback_query(callback_query.id, text='Нажата вторая кнопка')
-    elif code == 5:
-        await bot.answer_callback_query(
-            callback_query.id,
-            text='Нажата кнопка с номером 5.\nА этот текст может быть длиной до 200 символов 😉',
-            show_alert=True)
-    else:
-        await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id, f'Нажата инлайн кнопка! code={code}')
+async def stick_scared(message):
+    used_stick = []
+    chosen = random.choice(list(stick["scared"]))
+    old_scared = ''
+    while chosen == old_scared:
+        chosen = random.choice(list(stick["scared"]))
+    await bot.send_sticker(message.chat.id, chosen)
+    if len(used_stick) == 3:
+        used_stick.clear()
+    old_scared = chosen
+    used_stick.append(old_scared)
 
 
-##
+async def stick_hi(message):
+    used_stick = []
+    chosen = random.choice(list(stick["hi"]))
+    old_hi = ''
+    while chosen == old_hi:
+        chosen = random.choice(list(stick["hi"]))
+    await bot.send_sticker(message.chat.id, chosen)
+    if len(used_stick) == 3:
+        used_stick.clear()
+    old_hi = chosen
+    used_stick.append(old_hi)
+
+
+async def stick_by(message):
+    used_stick = []
+    chosen = random.choice(list(stick["by"]))
+    old_by = ''
+    while chosen == old_by:
+        chosen = random.choice(list(stick["by"]))
+    await bot.send_sticker(message.chat.id, chosen)
+    if len(used_stick) == 3:
+        used_stick.clear()
+    old_by = chosen
+    used_stick.append(old_by)
 
 
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
-    await message.reply("Привет!", reply_markup=kb.greet_kb)
+    await message.answer(
+        "Привет, меня зовут Шлепа, ты можешь Выбрать аккорды или бои и я покажу тебе какие есть варианты :)/n"
+        "Также есть несколько интересных команд которые могут быть использованы в боте, чтобы узнать о них просто напиши /help")
 
 
-@dp.message_handler(commands=['hi1'])
-async def process_hi1_command(message: types.Message):
-    await message.reply("Первое - изменяем размер клавиатуры",
-                        reply_markup=kb.greet_kb1)
-
-
-@dp.message_handler(commands=['hi2'])
-async def process_hi2_command(message: types.Message):
-    await message.reply("Второе - прячем клавиатуру после одного нажатия",
-                        reply_markup=kb.greet_kb2)
-
-
-@dp.message_handler(commands=['hi3'])
-async def process_hi3_command(message: types.Message):
-    await message.reply("Третье - добавляем больше кнопок",
-                        reply_markup=kb.markup3)
-
-
-@dp.message_handler(commands=['hi4'])
-async def process_hi4_command(message: types.Message):
-    await message.reply("Четвертое - расставляем кнопки в ряд",
-                        reply_markup=kb.markup4)
-
-
-@dp.message_handler(commands=['hi5'])
-async def process_hi5_command(message: types.Message):
-    await message.reply("Пятое - добавляем ряды кнопок",
-                        reply_markup=kb.markup5)
-
-
-@dp.message_handler(commands=['hi6'])
-async def process_hi6_command(message: types.Message):
-    await message.reply("Шестое - запрашиваем контакт и геолокацию\n"
-                        "Эти две кнопки не зависят друг от друга",
-                        reply_markup=kb.markup_request)
-
-
-@dp.message_handler(commands=['hi7'])
-async def process_hi7_command(message: types.Message):
-    await message.reply("Седьмое - все методы вместе",
-                        reply_markup=kb.markup_big)
-
-
-@dp.message_handler(commands=['rm'])
-async def process_rm_command(message: types.Message):
-    await message.reply("Убираем шаблоны сообщений",
-                        reply_markup=kb.ReplyKeyboardRemove())
-
-
-##
-
-
-@dp.message_handler(commands=['1'])
-async def process_command_1(message: types.Message):
-    await message.reply("Первая инлайн кнопка",
-                        reply_markup=kb.inline_kb1)
-
-
-@dp.message_handler(commands=['2'])
-async def process_command_2(message: types.Message):
-    await message.reply("Отправляю все возможные кнопки",
-                        reply_markup=kb.inline_kb_full)
-
-
-help_message = text(
-    "Это урок по клавиатурам.",
-    "Доступные команды:\n",
-    "/start - приветствие",
-    "\nШаблоны клавиатур:",
-    "/hi1 - авто размер",
-    "/hi2 - скрыть после нажатия",
-    "/hi3 - больше кнопок",
-    "/hi4 - кнопки в ряд",
-    "/hi5 - больше рядов",
-    "/hi6 - запрос локации и номера телефона",
-    "/hi7 - все методы"
-    "/rm - убрать шаблоны",
-    "\nИнлайн клавиатуры:",
-    "/1 - первая кнопка",
-    "/2 - сразу много кнопок",
-    sep="\n"
-)
+@dp.message_handler(commands=['Поздороваться', 'Попрощаться'])
+async def Hi_and_By(message: types.Message):
+    if message.text.title() == '/Поздороваться':
+        hi_2 = random.choice(list(user_inp[1]))
+        await bot.send_message(message.chat.id, hi_2)
+        await stick_hi(message)
+    else:
+        buying = random.choice(list(user_inp[2]))
+        await bot.send_message(message.chat.id, buying)
+        await stick_by(message)
 
 
 @dp.message_handler(commands=['help'])
 async def process_help_command(message: types.Message):
-    await message.reply(help_message)
+    await message.answer("Вот список того что я могу :)")
+    await bot.send_message(message.from_user.id,
+                           "1 - Можешь написать /Поздороваться или /Попрощаться если вы достаточно интеллигентны\n"
+                           "2 - Можешь выбрать аккорды используя /аккорды\n"
+                           "3 - Можешь выбрать бои используя /бои\n"
+                           "4 - Так же есть викторина /Викторина\n")
 
 
-if __name__ == '__Переделка__':
-    executor.start_polling(dp)
+executor.start_polling(dp)

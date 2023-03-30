@@ -15,13 +15,13 @@ menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 akkords = types.ReplyKeyboardMarkup(resize_keyboard=True)
 boy = types.ReplyKeyboardMarkup(resize_keyboard=True)
 back = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-A = types.ReplyKeyboardMarkup(resize_keyboard=True)
-D = types.ReplyKeyboardMarkup(resize_keyboard=True)
-E = types.ReplyKeyboardMarkup(resize_keyboard=True)
-F = types.ReplyKeyboardMarkup(resize_keyboard=True)
-G = types.ReplyKeyboardMarkup(resize_keyboard=True)
-H = types.ReplyKeyboardMarkup(resize_keyboard=True)
-C = types.ReplyKeyboardMarkup(resize_keyboard=True)
+# A = types.ReplyKeyboardMarkup(resize_keyboard=True)
+# D = types.ReplyKeyboardMarkup(resize_keyboard=True)
+# E = types.ReplyKeyboardMarkup(resize_keyboard=True)
+# F = types.ReplyKeyboardMarkup(resize_keyboard=True)
+# G = types.ReplyKeyboardMarkup(resize_keyboard=True)
+# H = types.ReplyKeyboardMarkup(resize_keyboard=True)
+# C = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
 # Создание кнопок для выбора
 hi = types.KeyboardButton("Поздороваться")
@@ -39,7 +39,7 @@ a = types.KeyboardButton("A")
 h = types.KeyboardButton("H")
 hm = types.KeyboardButton("Hm")
 am = types.KeyboardButton("Am")
-vekt = types.InlineKeyboardButton("Викторина", callback_data="Викторина")
+vekt = types.KeyboardButton("Викторина")
 video_lessons = types.KeyboardButton("Видеоуроки")
 les_1 = types.InlineKeyboardButton("1", callback_data='1')
 ak = types.KeyboardButton("Аккорды")
@@ -51,13 +51,13 @@ ret = types.KeyboardButton("Вернуться")
 welcome.add(hi)
 akkords.add(a, d, e, f, fm, f_m, g, h, hm, c, em, dm, am, ret)
 vid_menu.add(les_1, ret)
-A.add(a, am)
-D.add(d, dm)
-E.add(em, e)
-F.add(f)
-G.add(g)
-H.add(h)
-C.add(c)
+# A.add(a, am)
+# D.add(d, dm)
+# E.add(em, e)
+# F.add(f)
+# G.add(g)
+# H.add(h)
+# C.add(c)
 boy.add(ch, sh, vos, ret)
 menu.add(ak, boi, by, vekt)
 back.add(ret)
@@ -83,7 +83,6 @@ user_inp = {
     1: ["Привет", "Ку", "Хай", "Здарова", "Здаров", "Даров", "Дарова", "Мое почтение"],
     2: ["Пока", "Прощай", "Покеда", "До новых встреч", "Увидимся"]
 }
-
 for_vict = {
     'C': r'for_vict/C.jpg',
     'D': r"for_vict/D.jpg",
@@ -139,12 +138,13 @@ stick = {
            'CAACAgIAAxkBAAEHOdFjwFM9Uk-tR7Uz8TBkjNvna6UAAaIAAkANAALRBuhKXBBwRgJRkoUtBA',
            'CAACAgIAAxkBAAEHOdRjwFNbGhkVyTzAsVHYrezTqq3i5wAC3AwAArwyMEvpqHQDAcqfgC0E',
            'CAACAgIAAxkBAAEHOdZjwFNinFXQJAABxmNTUAAB1y-vkt8vAAJnDAAC-xihS4JDjXDhj00DLQQ'],
+
     "scared": ['CAACAgIAAxkBAAEHlx1j3r4VzuDiqh8zWKH9UCoRYd-o5gAC5goAAqEGoUpEgJAmKveTjy4E',
                'CAACAgIAAxkBAAEHlz9j3sg62boThgL2BJa4x56x_TwsDwAC_gkAAijjMEsBHslhx99bIi4E',
                'CAACAgIAAxkBAAEHl0Fj3sj0mePpU5ehcdyl7zf6P4UsjwACIh8AAs7wEEsQpDtCO8Q8rS4E',
                'CAACAgIAAxkBAAEHl0Nj3snJfe6U7gS48bkjAAFZkwbF3XUAAjkjAALSO3BKN-IZU2C_-P4uBA']
 }
-# Словарь с видеоуроками
+# Словарь с видеоуроками (В будущем)
 video = {'1': r''}
 
 
@@ -218,6 +218,72 @@ live = 3
 count = 0  # Подсчет угаданных аккордов
 
 
+# Код для викторины
+def vikt(message):
+    global live, count
+    bot.send_message(message.chat.id,
+                     "Итак, викторина. \nПравила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
+    # reply_markup=vik)
+    while message != "Вернуться" or live > 0:
+        print("Цикл начался")
+        vik_quiz = types.InlineKeyboardMarkup()
+        vik_answers = []
+        true_answer = random.choice(list(vic_buttons))
+        fake_answer1 = random.choice(list(vic_buttons))
+        fake_answer2 = random.choice(list(vic_buttons))
+        fake_answer3 = random.choice(list(vic_buttons))
+        vik_answers.append(true_answer)
+        vik_answers.append(fake_answer1)
+        vik_answers.append(fake_answer2)
+        vik_answers.append(fake_answer3)
+        random.shuffle(vik_answers)
+        true_ind = vik_answers.index(true_answer)
+        for i in range(4):
+            while vik_answers.count(vik_answers[i]) > 1:
+                print("Производится замена ответа")
+                for j in range(len(vik_answers)):
+                    vik_answers[j] = random.choice(list(vic_buttons))
+        # while vik_answers.count(true_answer) > 1:
+        #     print("Производится замена ответа")
+        #     for i in range(len(vik_answers)):
+        #         vik_answers[i] = random.choice(vik_answers)
+        # while vik_answers.count(fake_answer1) > 1:
+        #     print("Производится замена ответа")
+        #     for i in range(len(vik_answers)):
+        #         vik_answers[i] = random.choice(vik_answers)
+        # while vik_answers.count(fake_answer2) > 1:
+        #     print("Производится замена ответа")
+        #     for i in range(len(vik_answers)):
+        #         vik_answers[i] = random.choice(vik_answers)
+        # while vik_answers.count(fake_answer3) > 1:
+        #     print("Производится замена ответа")
+        #     for i in range(len(vik_answers)):
+        #         vik_answers[i] = random.choice(vik_answers)
+        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[0],
+                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
+                                                    0] else 'Неправильно!'))
+        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[1],
+                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
+                                                    1] else 'Неправильно!'))
+        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[2],
+                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
+                                                    2] else 'Неправильно!'))
+        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[3],
+                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
+                                                    3] else 'Неправильно!'))
+        bot.send_photo(message.chat.id, open(for_vict[vik_answers[true_ind]], "rb"))
+        bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=vik_quiz)
+        print("Отправлен вопрос")
+        time.sleep(5)
+        if live == 0:
+            bot.send_message(message.chat.id, text=f"Количество жизней закончилось.\n Ты угадал аккордов: {count}",
+                             reply_markup=menu)
+            count = 0
+            break
+    message.text = ""
+    get_text_messages(message)
+
+
 @bot.callback_query_handler(func=lambda query: True)
 def check_answer(query):
     global live, count
@@ -233,75 +299,15 @@ def check_answer(query):
         live -= 1
 
 
-# Код для викторины
-def vikt(message):
-    global live, count
-    bot.send_message(message.chat.id,
-                     "Итак, викторина. \nПравила просты, просто угадываешь аккорд или бой, если ошибаешься, то все по новой")
-    # reply_markup=vik)
-    while message != "Вернуться" or live > 0:
-        vik_quiz = types.InlineKeyboardMarkup()
-        vik_answers = []
-        true_answer = random.choice(list(vic_buttons))
-        fake_answer1 = random.choice(list(vic_buttons))
-        fake_answer2 = random.choice(list(vic_buttons))
-        fake_answer3 = random.choice(list(vic_buttons))
-        vik_answers.append(true_answer)
-        vik_answers.append(fake_answer1)
-        vik_answers.append(fake_answer2)
-        vik_answers.append(fake_answer3)
-        random.shuffle(vik_answers)
-        for i in range(0, 4):
-            if vik_answers[0] == vik_answers[i] and i != 0 and vik_answers[0] != true_answer:
-                vik_answers[i] = random.choice(list(vic_buttons))
-            elif vik_answers[1] == vik_answers[i] and i != 1 and vik_answers[1] != true_answer:
-                vik_answers[i] = random.choice(list(vic_buttons))
-            elif vik_answers[2] == vik_answers[i] and i != 2 and vik_answers[2] != true_answer:
-                vik_answers[i] = random.choice(list(vic_buttons))
-            elif vik_answers[3] == vik_answers[i] and i != 3 and vik_answers[3] != true_answer:
-                vik_answers[i] = random.choice(list(vic_buttons))
-            else:
-                pass
-        true_ind = vik_answers.index(true_answer)
-        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[0],
-                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
-                                                    0] else 'Неправильно!'))
-        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[1],
-                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
-                                                    1] else 'Неправильно!'))
-        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[2],
-                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
-                                                    2] else 'Неправильно!'))
-        vik_quiz.add(types.InlineKeyboardButton(text=vik_answers[3],
-                                                callback_data='Правильно!' if vik_answers[true_ind] == vik_answers[
-                                                    3] else 'Неправильно!'))
-        bot.send_photo(message.chat.id, open(for_vict[true_answer], "rb"))
-        bot.send_message(message.chat.id, "Какой это аккорд?)", reply_markup=vik_quiz)
-        time.sleep(5)
-        if live == 0:
-            bot.send_message(message.chat.id, text=f"Количество жизней закончилось.\n Ты угадал аккордов: {count}",
-                             reply_markup=menu)
-            count = 0
-            break
-    message.text = ""
-    get_text_messages(message)
-
-
 # Сам код
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def get_text_messages(message):
     b = message.text.title()
-    print('-' * 100)
-    print(bot.user)
-    print(b)
-    print(datetime.datetime.now())
-    print(message.chat.id)
-    print(message.chat)
     if b == "Поздороваться" or message.text == '/start':
         welcoming(message)
     elif b == "Викторина":
         bot.send_message(message.chat.id, "Викторина в данный момент разрабатывается")
-        stick_dep(message)
+        # stick_dep(message)
         # vikt(message)
     # Вывод боя и выбор
     if b == "Бой":
