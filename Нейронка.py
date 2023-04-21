@@ -1,11 +1,6 @@
 import librosa
 import numpy as np
-import tensorflow as tf
-
-# Загрузить модель
-file_name = ''
-model = tf.keras.models.load_model(file_name + '.ogg')
-
+from Переделка import model
 # Создать словарь, отображающий индекс аккорда в его название
 chord_idx = {0: 'C',
              1: 'D',
@@ -43,5 +38,4 @@ def classify_chord(file_path):
 
     return chord_name
 
-
-classify_chord(model)
+# classify_chord(model) Удобнее вызвать функцию из другого файла(возможно)

@@ -2,15 +2,14 @@ import datetime
 import random
 import time
 
-import telebot
-from telebot import types
+from telebot import types, TeleBot
 
 # Токен
-bot = telebot.TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
+bot = TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
 
 # Создание менюшки
 welcome = types.ReplyKeyboardMarkup(resize_keyboard=True)
-vid_menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
+les_menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 akkords = types.ReplyKeyboardMarkup(resize_keyboard=True)
 boy = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -35,31 +34,35 @@ f = types.KeyboardButton("F")
 fm = types.KeyboardButton("Fm")
 f_m = types.KeyboardButton("F#m")
 g = types.KeyboardButton("G")
+gm = types.KeyboardButton("Gm")
 a = types.KeyboardButton("A")
+a_ = types.KeyboardButton("A#")
 h = types.KeyboardButton("H")
+h7 = types.KeyboardButton("H7")
 hm = types.KeyboardButton("Hm")
 am = types.KeyboardButton("Am")
 vekt = types.KeyboardButton("Викторина")
-video_lessons = types.KeyboardButton("Видеоуроки")
-les_1 = types.InlineKeyboardButton("1", callback_data='1')
+lessons = types.KeyboardButton("Уроки")
+les_1 = types.KeyboardButton("1")
+les_2 = types.KeyboardButton("2")
+les_3 = types.KeyboardButton("3")
+les_4 = types.KeyboardButton("4")
+les_5 = types.KeyboardButton("5")
+les_6 = types.KeyboardButton("6")
+les_7 = types.KeyboardButton("7")
+les_8 = types.KeyboardButton("8")
 ak = types.KeyboardButton("Аккорды")
 boi = types.KeyboardButton("Бой")
 ch = types.KeyboardButton("Четверка")
 sh = types.KeyboardButton("Шестерка")
+sem = types.KeyboardButton("Семерка")
 vos = types.KeyboardButton("Восьмерка")
 ret = types.KeyboardButton("Вернуться")
 welcome.add(hi)
-akkords.add(a, d, e, f, fm, f_m, g, h, hm, c, em, dm, am, ret)
-vid_menu.add(les_1, ret)
-# A.add(a, am)
-# D.add(d, dm)
-# E.add(em, e)
-# F.add(f)
-# G.add(g)
-# H.add(h)
-# C.add(c)
-boy.add(ch, sh, vos, ret)
-menu.add(ak, boi, by, vekt)
+akkords.add(a, a_, d, e, f, fm, f_m, g, gm, h, h7, hm, c, em, dm, am, ret)
+les_menu.add(les_1, les_2, les_3, les_4, les_5, les_6, les_7, ret)
+boy.add(ch, sh, sem, vos, ret)
+menu.add(lessons, ak, boi, by, vekt)
 back.add(ret)
 # Словарь для генерирования разных ответов в викторине
 vic_buttons = {
@@ -101,7 +104,7 @@ for_vict = {
 
 # Создание словаря картинок
 akk = {
-    'C': r'ak/С/C.jpg',
+    'C': r"ak/С/C.jpg",
     'D': r"ak/D/D.jpg",
     'Dm': r'ak/D/Dm.jpg',
     'E': r"ak/E/E.jpg",
@@ -110,15 +113,18 @@ akk = {
     "Fm": r"ak/F/Fm.jpg",
     "F#M": r"ak/F/F#m.jpg",
     "G": r"ak/G/G.jpg",
+    "Gm": r"ak/G/Gm.jpg",
     "A": r"ak/A/A.jpg",
+    "A#": r"ak/A/A#.jpg",
     "Am": r"ak/A/Am.jpg",
     "H": r"ak/H/H.jpg",
+    "H7": r"ak/H/H7.jpg",
     "Hm": r"ak/H/Hm.jpg"
 }
-perebor = {}
 bo = {
     "Четверка": r'boy/Chetverka.jpg',
     "Шестерка": r'boy/Shesterka.jpg',
+    "Семерка": r"boy/Semerka.jpg",
     "Восьмерка": r'boy/Vosmerka.jpg'
 }
 stick = {
@@ -144,8 +150,76 @@ stick = {
                'CAACAgIAAxkBAAEHl0Fj3sj0mePpU5ehcdyl7zf6P4UsjwACIh8AAs7wEEsQpDtCO8Q8rS4E',
                'CAACAgIAAxkBAAEHl0Nj3snJfe6U7gS48bkjAAFZkwbF3XUAAjkjAALSO3BKN-IZU2C_-P4uBA']
 }
-# Словарь с видеоуроками (В будущем)
-video = {'1': r''}
+# Словарь с уроками
+less_dict = {
+    # Наработка боя четверка
+    '1': "Звезда по имени Солнце\n"
+         "(4) - Нужно повторить бой зажимая аккорд 4 раза\n"
+         r"\2 - Нужно повторить всю строку 2 раза" "\n"
+         "Бой: Четверка\n"
+         "Аккорды:\n"
+         r"Am(4) C(4) Dm(4) G(4)\2" "\n"
+         "Dm(4) Am(4)",
+
+    '2': 'Пачка сигарет\n'
+         r'Em C Am G\до конца',
+
+    # Наработка боя шестерка
+    '3': 'Кукушка\n'
+         'Бой: Шестерка\n'
+         'Вступление:\n'
+         r'Am C G Em\4' '\n'
+         'Куплет\n'
+         r'Am(4) G Dm Am\2' '\n'
+         'Припев\n'
+         r'G Dm Am(2)\4',
+
+    '4': "Просвистела\n"
+         "Бой: Шестерка\n"
+         r"Аккорды: Em C G H7 \До конца",
+
+    '5': 'Дурак и молния\n'
+         'Четверка\n'
+         r'F(2) E(2) Am(4) \3 раза' '\n'
+         'F(У) E(У) Am(У)\n'
+         'Припев\n'
+         r'F E Am(2) \3 раза' '\n'
+         'Шестёрка\n'
+         'Dm Em Am(У)\n'
+         'G(2) Em(2) F G Em Am Dm(2) E(У)',
+
+    '6': 'Утренний рассвет\n'
+         'Бой: Шестерка'
+         r'D(2) Hm Hm(У) A(У)\2' '\n'
+         'D(2) Hm(2) D(2) Hm(2)\n'
+         'Четверка(Dm C) Шестерка(A#)\2' '\n'
+         'Шестерка(Gm A#) A(У)',
+
+    '7': 'Выхода нет\n'
+         '0,5 - разделение боя\n'
+         'Первая половина - первые  два удара\n'
+         'Вторая половина - все остальное\n'
+         'Бой: Семерка\n'
+         'Аккорды:\n'
+         'Em(4)\n'
+         r'C(0,5) G(0,5) D Em(0,5) C(0,5) G\2' '\n'
+         r'C(0,5) G(0,5) D\2' '\n'
+         r'Em C G D\2' '\n'
+         'C D Em(4)'
+}
+aud_primery = {'1': "",
+
+               '2': '',
+
+               '3': '',
+
+               '4': "Primery_pesen/Просвистела(пример).aac",
+
+               '5': '',
+
+               '6': '',
+
+               '7': 'Primery_pesen/Выхода нет(пример).aac'}
 
 
 # Приветствие
@@ -300,18 +374,25 @@ def check_answer(query):
 
 
 # Сам код
-@bot.message_handler(func=lambda message: True, content_types=['text'])
+@bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     b = message.text.title()
+    print('-' * 100)
+    print(message.from_user)
+    print(b)
+    print(datetime.datetime.now())
+    print(message.chat.id)
+    # print(message.chat)
     if b == "Поздороваться" or message.text == '/start':
         welcoming(message)
     elif b == "Викторина":
         bot.send_message(message.chat.id, "Викторина в данный момент разрабатывается")
-        # stick_dep(message)
+        stick_dep(message)
         # vikt(message)
     # Вывод боя и выбор
-    if b == "Бой":
-        bot.send_message(message.chat.id, "Выбирай бой",
+    elif b == "Бой":
+        bot.send_message(message.chat.id, "Выбирай бой\n"
+                                          "Примечание: Щ - удар по струнам с глушением или без",
                          reply_markup=boy)
     elif b in bo:
         bot.send_photo(message.chat.id, open(bo[b], "rb"))
@@ -325,11 +406,19 @@ def get_text_messages(message):
     # Возврат к меню
     elif b == "Вернуться":
         bot.send_message(message.chat.id, "Выбери что тебе нужно :)", reply_markup=menu)
-    # Отправка видеоуроков пользователю(в будущем)
-    # elif b == "Видеоуроки":
-    #     bot.send_message(message.chat.id, "Выбирай урок", reply_markup=vid_menu)
-    # elif message.text in video:
-    #     bot.send_video(message.chat.id, open(video[b], 'rb'))
+    # Отправка уроков пользователю(в будущем)
+    elif b == "Уроки":
+        bot.send_message(message.chat.id, "Выбирай урок\n"
+                                          "Аккорд(количество повторов боя на аккорде) - Повтор игры аккорда\n"
+                                          "Аккорд(У) - Означает что нужно просто ударить по струнам вниз"
+                                          "/ число повторов - Количество повторов всей строки\n"
+                                          "Пример с объянением есть в первом уроке если что-то не понятно",
+                         reply_markup=les_menu)
+    elif b in less_dict:
+        bot.send_message(message.chat.id, less_dict[b])
+        if aud_primery[b] != '':
+            bot.send_message(message.chat.id, 'Пример:')
+            bot.send_audio(message.chat.id, open(aud_primery[b], "rb"))
     # Помощь
     elif message.text == "/help":
         bot.send_message(message.chat.id,
@@ -339,6 +428,8 @@ def get_text_messages(message):
         buying = random.choice(list(user_inp[2]))
         bot.send_message(message.chat.id, buying, reply_markup=welcome)
         stick_by(message)
+    else:
+        bot.send_message(message.chat.id, "Я тебя не понял, если тебе что то нужно напиши /help")
 
 
 # Обратная связь с ботом
