@@ -1,11 +1,8 @@
-import datetime
-import random
-import time
+from config import *
 
-from telebot import types, TeleBot
 
 # Токен
-bot = TeleBot('5584522153:AAEWFjH0efEJRbpAAMWqGQR9tWeYRTY04_c')
+bot = TeleBot(Bot_token)
 
 # Создание менюшки
 welcome = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -14,13 +11,7 @@ menu = types.ReplyKeyboardMarkup(resize_keyboard=True)
 akkords = types.ReplyKeyboardMarkup(resize_keyboard=True)
 boy = types.ReplyKeyboardMarkup(resize_keyboard=True)
 back = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-# A = types.ReplyKeyboardMarkup(resize_keyboard=True)
-# D = types.ReplyKeyboardMarkup(resize_keyboard=True)
-# E = types.ReplyKeyboardMarkup(resize_keyboard=True)
-# F = types.ReplyKeyboardMarkup(resize_keyboard=True)
-# G = types.ReplyKeyboardMarkup(resize_keyboard=True)
-# H = types.ReplyKeyboardMarkup(resize_keyboard=True)
-# C = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
 
 # Создание кнопок для выбора
 hi = types.KeyboardButton("Поздороваться")
@@ -170,7 +161,7 @@ less_dict = {
          'Вступление:\n'
          r'Am C G Em\4' '\n'
          'Куплет\n'
-         r'Am(4) G Dm Am\2' '\n'
+         r'Am(4) G Dm Am(2)\2' '\n'
          'Припев\n'
          r'G Dm Am(2)\4',
 
@@ -178,7 +169,21 @@ less_dict = {
          "Бой: Шестерка\n"
          r"Аккорды: Em C G H7 \До конца",
 
-    '5': 'Дурак и молния\n'
+    '5': "Когда твоя девушка больна\n"
+         "Бой: Шестерка\n"
+         "Аккорды:\n "
+         r"G Em C D \4" "\n"
+         r"C D G Em\2" '\n'
+         'C D G Em C D G',
+    # Знакомство с баррэ
+    '6':'Утренний рассвет\n'
+         'Бой: Шестерка'
+         r'D(2) Hm Hm(У) A(У)\2' '\n'
+         'D(2) Hm(2) D(2) Hm(2)\n'
+         'Четверка(Dm C) Шестерка(A#)\2' '\n'
+         'Шестерка(Gm A#) A(У)',
+    # Совмещение Четверки и Шестерки
+    '7': 'Дурак и молния\n'
          'Четверка\n'
          r'F(2) E(2) Am(4) \3 раза' '\n'
          'F(У) E(У) Am(У)\n'
@@ -187,15 +192,8 @@ less_dict = {
          'Шестёрка\n'
          'Dm Em Am(У)\n'
          'G(2) Em(2) F G Em Am Dm(2) E(У)',
-
-    '6': 'Утренний рассвет\n'
-         'Бой: Шестерка'
-         r'D(2) Hm Hm(У) A(У)\2' '\n'
-         'D(2) Hm(2) D(2) Hm(2)\n'
-         'Четверка(Dm C) Шестерка(A#)\2' '\n'
-         'Шестерка(Gm A#) A(У)',
-
-    '7': 'Выхода нет\n'
+    # Изучение боя семерка
+    '8': 'Выхода нет\n'
          '0,5 - разделение боя\n'
          'Первая половина - первые  два удара\n'
          'Вторая половина - все остальное\n'
@@ -207,19 +205,21 @@ less_dict = {
          r'Em C G D\2' '\n'
          'C D Em(4)'
 }
-aud_primery = {'1': "",
+aud_primery = {'1': "Primery_pesen/Звезда по имени Солнце (пример) .aac",
 
-               '2': '',
+               '2': 'Primery_pesen/Пачка сигарет (пример).aac',
 
-               '3': '',
+               '3': 'Primery_pesen/Кукушка(пример).aac',
 
                '4': "Primery_pesen/Просвистела(пример).aac",
 
-               '5': '',
+               '5': 'Primery_pesen/Когда твоя девушка больна(пример).aac',
 
-               '6': '',
+               '6': 'Primery_pesen/Утренний рассвет(пример).aac',
 
-               '7': 'Primery_pesen/Выхода нет(пример).aac'}
+               '7': 'Primery_pesen/Дурак и Молния(пример).aac',
+
+               '8': 'Primery_pesen/Выхода нет(пример).aac'}
 
 
 # Приветствие
